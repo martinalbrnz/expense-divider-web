@@ -15,8 +15,10 @@ export const login = async (email: string, pass: string): Promise<RecordAuthResp
 }
 
 export const getIncomes = async (): Promise<Record<string, any>> => {
-	const incomes = await pb.collection('incomes').getList()
-	console.log(incomes)
+	return await pb.collection('incomes').getFullList()
+}
 
-	return incomes
+export function logout() {
+	pb.authStore.clear()
+	localStorage.clear()
 }

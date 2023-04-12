@@ -1,4 +1,6 @@
+import { Show } from "solid-js";
 import { A, useLocation } from "solid-start";
+import { logout } from "~/services/pocketbase";
 
 const Header = () => {
   const location = useLocation();
@@ -19,6 +21,17 @@ const Header = () => {
         <li class={`border-b-2 ${active("/user")} mx-1.5 sm:mx-6`}>
           <A href="/user">Usuario</A>
         </li>
+        <li class={`border-b-2 ${active("/ingresos")} mx-1.5 sm:mx-6`}>
+          <A href="/ingresos">Ingresos</A>
+        </li>
+        <Show when={!localStorage.getItem("pocketbase_auth")}>
+          <li class={`border-b-2 ${active("/login")} mx-1.5 sm:mx-6`}>
+            <A href="/login">Login</A>
+          </li>
+        </Show>
+        <Show when={localStorage.getItem("pocketbase_auth")}>
+          <button onclick={logout}>Cerrar sesión</button>
+        </Show>
       </ul>
     </nav>
   );

@@ -1,20 +1,21 @@
 import { createForm } from "@felte/solid";
-import { Navigate, useNavigate } from "@solidjs/router";
+import { Navigate } from "@solidjs/router";
+import { useAuth } from "~/components/contexts/auth";
 import { login } from "~/services/pocketbase";
 
 const Login = () => {
-  const navigate = useNavigate();
+  const [auth, { setAuth }]: any = useAuth();
+
   const { form } = createForm({
     onSubmit: (values, _) => {
       login(values.email, values.password).then((resp) => {
-        if (resp.token) return <Navigate href={"/"} />;
+        if (resp.token) setAuth(resp);
       });
     },
   });
 
-  if (localStorage.getItem("token")) {
-    navigate("/user");
-    return;
+  if (auth()) {
+    return <Navigate href="/user" />;
   } else
     return (
       <div class="flex items-center justify-center m-12">
