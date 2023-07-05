@@ -1,8 +1,14 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+import colors from "tailwindcss/colors";
+export default {
   content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      colors: {
+        primary: colors.emerald,
+        primary_text: colors.white,
+        secondary: colors.violet,
+      },
       animation: {
         wiggle: "wiggle 1s ease-in-out infinite",
       },

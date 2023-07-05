@@ -16,4 +16,29 @@ export const navRoutes: NavItemI[] = [
     label: "Usuario",
     icon: HiSolidUser,
   },
+  {
+    path: "users",
+    label: "Usuarizado",
+    icon: HiSolidUser,
+    children: [
+      {
+        path: "",
+        label: "Inicio",
+        icon: HiSolidHome,
+        extraClass: "ms-4",
+      },
+      {
+        path: "login",
+        label: "Ingresar",
+        icon: HiOutlineLockOpen,
+        extraClass: "ms-4",
+      },
+      {
+        path: "user",
+        label: "Usuario",
+        icon: HiSolidUser,
+        extraClass: "ms-4",
+      },
+    ],
+  },
 ];

@@ -20,7 +20,7 @@ const Login = () => {
   } else
     return (
       <div class="flex items-center justify-center m-12">
-        <div class="bg-white">
+        <div class="bg-white p-4 rounded shadow border border-sky-100">
           <form ref={form} class="flex flex-col gap-4">
             <div class="flex flex-col">
               <label>Email o usuario</label>
