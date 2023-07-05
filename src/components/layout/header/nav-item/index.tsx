@@ -38,13 +38,14 @@ const NavItem = (props: NavItemProps) => {
         </Show>
         <Show when={props.route.children}>
           <div
-            class="group absolute flex items-center justify-center right-3 transition-all duration-300
+            class="group absolute flex items-center justify-center transition-all duration-300
 						 bg-primary-600 h-6 w-6 rounded-full hover:animate-wiggle z-10"
             classList={{
               "rotate-180":
                 props.route.children && props.openRoutes.includes(id),
               "-right-0.5 -top-0.5 bg-transparent h-4 w-4":
                 !props.extendSidebar,
+              "right-3": props.extendSidebar,
             }}
             onclick={() => props.toggleOpen(id)}
           >
@@ -53,12 +54,7 @@ const NavItem = (props: NavItemProps) => {
         </Show>
       </A>
       <Show when={props.route.children && props.openRoutes.includes(id)}>
-        <div
-          classList={{
-            "border-b border-e rounded-b rounded-s-none border-primary-700":
-              props.route.children && props.openRoutes.includes(id),
-          }}
-        >
+        <div>
           <For each={props.route.children}>
             {(child) => (
               <NavItem
