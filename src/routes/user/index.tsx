@@ -1,10 +1,12 @@
 import { Show } from "solid-js";
+import { Navigate } from "solid-start";
 import { useAuth } from "~/components/contexts/auth";
 import Avatar from "~/components/shared/avatar";
 
 const User = () => {
   const [auth, { setAuth }]: any = useAuth();
 
+  if (!auth()) return <Navigate href={"/"}></Navigate>;
   return (
     <>
       <Show when={auth()} fallback={<div>Cargando...</div>}>

@@ -23,19 +23,23 @@ export default function Root() {
         <Meta charset="utf-8" />
         <Meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
-      <Body>
-        <StateProvider>
+      <StateProvider>
+        <Body>
           <Suspense>
             <ErrorBoundary>
-              <Header />
-              <Routes>
-                <FileRoutes />
-              </Routes>
+              <div class="flex h-screen ">
+                <Header />
+                <div class="w-full bg-slate-400">
+                  <Routes>
+                    <FileRoutes />
+                  </Routes>
+                </div>
+              </div>
             </ErrorBoundary>
           </Suspense>
-        </StateProvider>
-        <Scripts />
-      </Body>
+          <Scripts />
+        </Body>
+      </StateProvider>
     </Html>
   );
 }

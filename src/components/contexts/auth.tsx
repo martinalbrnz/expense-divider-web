@@ -15,8 +15,11 @@ export const AuthProvider = (props: AuthProviderI) => {
   const authUser = [
     auth,
     {
-      setAuth(auth: AuthUser) {
+      login(auth: AuthUser) {
         setAuth(auth);
+      },
+      logout() {
+        setAuth();
       },
     },
   ];

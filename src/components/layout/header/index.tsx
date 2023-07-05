@@ -1,38 +1,35 @@
-import { Show } from "solid-js";
-import { A, useLocation } from "solid-start";
-import { logout } from "~/services/pocketbase";
+import { For, createSignal } from "solid-js";
+import { navRoutes } from "~/constants/_nav";
+import NavItem from "./nav-item";
 
 const Header = () => {
-  const location = useLocation();
-  const active = (path: string) =>
-    path == location.pathname
-      ? "border-sky-600"
-      : "border-transparent hover:border-sky-600";
+  const [openRoutes, setOpenRoutes] = createSignal<string[]>([
+    "user",
+    "user/movements",
+  ]);
+
+  const role = "user";
+
+  const toggleOpenRoute = (path: string) => {
+    if (openRoutes().includes(path)) {
+      setOpenRoutes(openRoutes().filter((route) => route !== path));
+    } else {
+      setOpenRoutes([...openRoutes(), path]);
+    }
+  };
 
   return (
-    <nav class="bg-sky-800">
-      <ul class="container flex items-center p-3 text-gray-200">
-        <li class={`border-b-2 ${active("/")} mx-1.5 sm:mx-6`}>
-          <A href="/">Home</A>
-        </li>
-        <li class={`border-b-2 ${active("/about")} mx-1.5 sm:mx-6`}>
-          <A href="/about">About</A>
-        </li>
-        <li class={`border-b-2 ${active("/user")} mx-1.5 sm:mx-6`}>
-          <A href="/user">Usuario</A>
-        </li>
-        <li class={`border-b-2 ${active("/ingresos")} mx-1.5 sm:mx-6`}>
-          <A href="/ingresos">Ingresos</A>
-        </li>
-        <Show when={!localStorage.getItem("pocketbase_auth")}>
-          <li class={`border-b-2 ${active("/login")} mx-1.5 sm:mx-6`}>
-            <A href="/login">Login</A>
-          </li>
-        </Show>
-        <Show when={localStorage.getItem("pocketbase_auth")}>
-          <button onclick={logout}>Cerrar sesión</button>
-        </Show>
-      </ul>
+    <nav class="flex flex-col gap-1 px-2 bg-sky-800 h-full w-96">
+      <For each={navRoutes}>
+        {(route) => (
+          <NavItem
+            route={route}
+            toggleOpen={toggleOpenRoute}
+            openRoutes={openRoutes()}
+            role={role}
+          />
+        )}
+      </For>
     </nav>
   );
 };

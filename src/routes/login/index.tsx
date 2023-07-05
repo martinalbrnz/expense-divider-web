@@ -1,15 +1,16 @@
 import { createForm } from "@felte/solid";
 import { Navigate } from "@solidjs/router";
 import { useAuth } from "~/components/contexts/auth";
-import { login } from "~/services/pocketbase";
+import { AuthUser } from "~/models/authUser.model";
 
 const Login = () => {
-  const [auth, { setAuth }]: any = useAuth();
+  const [auth, { login }]: any = useAuth();
 
   const { form } = createForm({
     onSubmit: (values, _) => {
-      login(values.email, values.password).then((resp) => {
-        if (resp.token) setAuth(resp);
+      login(values.email, values.password).then((resp: AuthUser) => {
+        if (resp.token) login(resp);
+        console.log("login", resp);
       });
     },
   });
