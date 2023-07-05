@@ -14,7 +14,6 @@ export interface NavItemProps {
 
 const NavItem = (props: NavItemProps) => {
   const id = createUniqueId();
-  const extraClass = props.route.extraClass ?? "";
 
   return (
     <Show
