@@ -32,7 +32,7 @@ const NavItem = (props: NavItemProps) => {
           extraClass: !!props.route.extraClass,
         }}
       >
-        <>{props.route.icon}</>
+        <props.route.icon />
         <>{props.route.label}</>
         <Show when={props.route.children}>
           <div

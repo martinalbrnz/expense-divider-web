@@ -1,9 +1,9 @@
-import { JSX } from "solid-js/web/types/jsx"
+import { IconTypes } from "solid-icons"
 
 export interface NavItemI {
 	label: string
 	path: string
-	icon: JSX.Element
+	icon: IconTypes
 	role?: string[]
 	children?: NavItemI[]
 	extraClass?: string
