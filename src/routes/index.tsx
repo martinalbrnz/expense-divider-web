@@ -1,11 +1,7 @@
-import ThemeToggle from "~/components/shared/theme-toggle";
-
 export default function Home() {
   return (
     <>
-      <div class="p-10">
-        <ThemeToggle />
-      </div>
+      <div class="p-10 transition-colors duration-500"></div>
     </>
   );
 }
