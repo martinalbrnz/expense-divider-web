@@ -2,6 +2,7 @@
   "name": "expense-divider-web",
   "scripts": {
     "dev": "solid-start dev",
+    "dev:host": "solid-start dev --host",
     "build": "solid-start build",
     "start": "solid-start start"
   },

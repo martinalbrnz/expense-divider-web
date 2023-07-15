@@ -1,5 +1,5 @@
 // @refresh reload
-import { Suspense } from "solid-js";
+import { Suspense } from "solid-js/web";
 import {
   Body,
   ErrorBoundary,
@@ -12,7 +12,7 @@ import {
   Title,
 } from "solid-start";
 import { StateProvider } from "./components/contexts/state";
-import Header from "./components/layout/header";
+import Nav from "./components/layout/nav";
 import "./root.css";
 
 export default function Root() {
@@ -28,8 +28,8 @@ export default function Root() {
           <Suspense>
             <ErrorBoundary>
               <div class="flex h-screen ">
-                <Header />
-                <div class="w-full bg-slate-400">
+                <Nav />
+                <div class="w-full bg-slate-100 dark: bg-slate-900">
                   <Routes>
                     <FileRoutes />
                   </Routes>

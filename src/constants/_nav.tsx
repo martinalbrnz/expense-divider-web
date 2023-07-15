@@ -1,41 +1,40 @@
-import { HiOutlineLockOpen, HiSolidHome, HiSolidUser } from "solid-icons/hi";
+import {
+  RiBuildingsHome4Line,
+  RiBusinessLineChartLine,
+  RiFinanceMoneyDollarCircleLine,
+  RiFinanceShoppingCart2Line,
+  RiSystemLoginBoxLine,
+} from "solid-icons/ri";
 import { NavItemI } from "~/models/navItem.model";
+import { RoutesEnum } from "./routes";
 export const navRoutes: NavItemI[] = [
   {
     path: "",
     label: "Inicio",
-    icon: HiSolidHome,
+    icon: RiBuildingsHome4Line,
   },
   {
-    path: "login",
+    path: RoutesEnum.Login,
     label: "Ingresar",
-    icon: HiOutlineLockOpen,
+    icon: RiSystemLoginBoxLine,
+    role: ["guest"],
   },
   {
-    path: "user",
-    label: "Usuario",
-    icon: HiSolidUser,
+    path: RoutesEnum.Incomes,
+    label: "Ingresos",
+    icon: RiBusinessLineChartLine,
+    role: ["user"],
   },
   {
-    path: "users",
-    label: "Usuarizado",
-    icon: HiSolidUser,
-    children: [
-      {
-        path: "",
-        label: "Inicio",
-        icon: HiSolidHome,
-      },
-      {
-        path: "login",
-        label: "Ingresar",
-        icon: HiOutlineLockOpen,
-      },
-      {
-        path: "user",
-        label: "Usuario",
-        icon: HiSolidUser,
-      },
-    ],
+    path: RoutesEnum.Outcomes,
+    label: "Compras",
+    icon: RiFinanceShoppingCart2Line,
+    role: ["user"],
+  },
+  {
+    path: RoutesEnum.Payments,
+    label: "Pagos",
+    icon: RiFinanceMoneyDollarCircleLine,
+    role: ["user"],
   },
 ];
