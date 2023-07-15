@@ -3,6 +3,7 @@ import { Show } from "solid-js";
 export interface AvatarPropsI {
   filename?: string;
   collectionId?: string;
+  rounded?: boolean;
   id?: string;
   alt?: string;
   extraClass?: string;

@@ -2,12 +2,12 @@
 import colors from "tailwindcss/colors";
 export default {
   content: ["./src/**/*.{html,js,jsx,ts,tsx}"],
+  darkMode: "class",
   theme: {
     extend: {
       colors: {
-        primary: colors.emerald,
-        primary_text: colors.white,
-        secondary: colors.violet,
+        primary: colors.sky,
+        secondary: colors.zinc,
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

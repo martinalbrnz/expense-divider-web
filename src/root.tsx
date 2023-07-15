@@ -3,17 +3,14 @@ import { Suspense } from "solid-js/web";
 import {
   Body,
   ErrorBoundary,
-  FileRoutes,
   Head,
   Html,
   Meta,
-  Routes,
   Scripts,
   Title,
 } from "solid-start";
+import App from "./app";
 import { StateProvider } from "./components/contexts/state";
-import Header from "./components/layout/header";
-import Nav from "./components/layout/nav";
 import "./root.css";
 
 export default function Root() {
@@ -28,20 +25,7 @@ export default function Root() {
         <Body>
           <Suspense>
             <ErrorBoundary>
-              <div class="flex h-[100svh] md:h-screen w-screen">
-                <Nav />
-                <div class="flex flex-col flex-1">
-                  <Header />
-                  <main class="flex justify-center flex-grow-[1] overflow-y-scroll bg-slate-100 dark:bg-slate-900 custom-scrollbar">
-                    <div class="w-full max-w-6xl">
-                      <Routes>
-                        <FileRoutes />
-                      </Routes>
-                      <div class="block md:hidden h-24"></div>
-                    </div>
-                  </main>
-                </div>
-              </div>
+              <App />
             </ErrorBoundary>
           </Suspense>
           <Scripts />

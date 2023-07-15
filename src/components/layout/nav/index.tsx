@@ -17,14 +17,14 @@ const Nav = () => {
         -translate-x-1/2 md:translate-x-0
         rounded-e-full rounded-s-full md:rounded-none
         flex md:flex-col justify-between gap-1
-        bg-primary-800 md:h-full
+        bg-secondary-800 md:h-full
         px-2 py-2"
       classList={{ "md:w-96": extendSidebar() }}
     >
       <div
         onclick={() => setExtendSidebar(!extendSidebar())}
         class="hidden md:flex items-center justify-center self-start cursor-pointer
-         bg-primary-700 rounded text-white"
+         bg-secondary-700 rounded text-white"
       >
         <HiOutlineBars3 class="text-3xl h-12 w-12" />
       </div>

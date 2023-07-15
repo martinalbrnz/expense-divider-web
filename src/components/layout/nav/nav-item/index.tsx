@@ -20,9 +20,9 @@ const NavItem = (props: NavItemProps) => {
     >
       <A
         href={`${props.fullPath ?? ""}${props.route.path}`}
-        activeClass="bg-primary-600"
+        activeClass="bg-secondary-600"
         end={true}
-        class="relative flex flex-col md:flex-row items-center justify-start gap-2 p-2 rounded-full md:rounded text-white font-medium hover:bg-primary-700 transition-all duration-100"
+        class="relative flex flex-col md:flex-row items-center justify-start gap-2 p-2 rounded-full md:rounded text-white font-medium hover:bg-secondary-700 transition-all duration-100"
         classList={{
           [props.route.extraClass!]: !!props.route.extraClass,
         }}
