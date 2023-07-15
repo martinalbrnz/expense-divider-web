@@ -29,7 +29,7 @@ export default function Root() {
             <ErrorBoundary>
               <div class="flex h-screen ">
                 <Nav />
-                <div class="w-full bg-slate-100 dark: bg-slate-900">
+                <div class="w-full bg-slate-100 dark:bg-slate-900">
                   <Routes>
                     <FileRoutes />
                   </Routes>
