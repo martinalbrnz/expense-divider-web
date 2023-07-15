@@ -5,7 +5,7 @@ import { navRoutes } from "~/constants/_nav";
 import NavItem from "./nav-item";
 
 const Nav = () => {
-  const [extendSidebar, setExtendSidebar] = createSignal<boolean>(true);
+  const [extendSidebar, setExtendSidebar] = createSignal<boolean>(false);
 
   const role = "user";
 
