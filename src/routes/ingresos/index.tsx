@@ -84,9 +84,14 @@ const Ingresos = () => {
                         ({income.expand.category_id.label}) {income.description}
                       </span>
                     </div>
-                    <div class="flex items-center justify-start sm:justify-between w-full sm:w-28 text-xl ">
+                    <div class="flex items-center justify-start sm:justify-between w-full sm:w-40 text-xl ">
                       <span>$</span>
-                      <span>{income.amount.toFixed(2)}</span>
+                      <span>
+                        {new Intl.NumberFormat("es", {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        }).format(income.amount)}
+                      </span>
                     </div>
                   </div>
                 </div>
