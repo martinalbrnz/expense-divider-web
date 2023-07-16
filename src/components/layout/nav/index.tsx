@@ -19,7 +19,7 @@ const Nav = () => {
         flex md:flex-col justify-between gap-1
         bg-secondary-800 md:h-full
         px-2 py-2"
-      classList={{ "md:w-96": extendSidebar() }}
+      classList={{ "md:w-52": extendSidebar() }}
     >
       <div
         onclick={() => setExtendSidebar(!extendSidebar())}

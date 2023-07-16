@@ -7,13 +7,13 @@ const App = () => {
   const [isDark, { toggleTheme }]: any = useTheme();
   return (
     <div
-      class="flex flex-col h-[100svh] md:h-screen w-screen"
+      class="flex h-[100svh] md:h-screen w-screen ring ring-red-600"
       classList={{ dark: isDark() }}
     >
-      <Header />
-      <div class="flex flex-1">
-        <Nav />
-        <main class="flex justify-center flex-grow-[1] overflow-y-scroll bg-slate-100 dark:bg-slate-900 custom-scrollbar">
+      <Nav />
+      <div class="flex flex-col flex-1">
+        <Header />
+        <main class="flex justify-center flex-grow-[1] overflow-y-auto bg-slate-100 dark:bg-slate-900 custom-scrollbar">
           <div class="w-full max-w-6xl">
             <Routes>
               <FileRoutes />
