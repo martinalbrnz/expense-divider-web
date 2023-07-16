@@ -59,10 +59,10 @@ const Ingresos = () => {
             </div>
           }
         >
-          <div class="flex flex-col gap-2 bg-gray-200 p-4 rounded shadow">
+          <div class="flex flex-col gap-2 bg-gray-200 dark:bg-gray-800 p-4 rounded shadow">
             <For each={incomes()}>
               {(income, i) => (
-                <div class="flex gap-4 items-center justify-between py-2 px-4 bg-white rounded shadow-sm hover:shadow transition-all duration-200">
+                <div class="flex gap-4 items-center justify-between py-2 px-4 bg-white dark:bg-gray-600 rounded shadow-sm hover:shadow transition-all duration-200 text-black dark:text-gray-300">
                   <div class="rounded-full overflow-hidden">
                     <img
                       src={pb.getFileUrl(

@@ -47,7 +47,7 @@ const Paginator = (props: PaginatorProps) => {
   };
 
   return (
-    <div class="flex gap-2 items-center justify-between bg-gray-200 p-4 rounded shadow">
+    <div class="flex gap-2 items-center justify-between bg-gray-200 dark:bg-gray-800 text-black dark:text-gray-300 p-4 rounded shadow">
       <div class="flex items-center justify-center w-8 h-8">
         <Show when={props.data.page !== 1}>
           <RiArrowsArrowLeftCircleLine
@@ -87,9 +87,9 @@ const PageItem = (props: PageItemProps) => {
   return (
     <Show when={props.i !== 0} fallback={<span class="select-none">...</span>}>
       <div
-        class="flex items-center justify-center rounded-full border w-8 h-8 transition-all duration-200 select-none cursor-pointer hover:shadow font-medium"
+        class="flex items-center justify-center rounded-full w-8 h-8 transition-all duration-200 select-none cursor-pointer hover:shadow font-medium text-black dark:text-gray-300"
         classList={{
-          "bg-secondary-300": props.i === props.data.page,
+          "bg-secondary-300 dark:bg-secondary-700": props.i === props.data.page,
         }}
         onclick={() => props.setPage(props.i)}
       >
