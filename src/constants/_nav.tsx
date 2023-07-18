@@ -1,8 +1,6 @@
 import {
   RiBuildingsHome4Line,
   RiBusinessLineChartLine,
-  RiFinanceMoneyDollarCircleLine,
-  RiFinanceShoppingCart2Line,
   RiSystemLoginBoxLine,
 } from "solid-icons/ri";
 import { NavItemI } from "~/models/navItem.model";
@@ -20,21 +18,9 @@ export const navRoutes: NavItemI[] = [
     role: ["guest"],
   },
   {
-    path: RoutesEnum.Incomes,
-    label: "Ingresos",
+    path: RoutesEnum.Registers,
+    label: "Registros",
     icon: RiBusinessLineChartLine,
-    role: ["user"],
-  },
-  {
-    path: RoutesEnum.Outcomes,
-    label: "Compras",
-    icon: RiFinanceShoppingCart2Line,
-    role: ["user"],
-  },
-  {
-    path: RoutesEnum.Payments,
-    label: "Pagos",
-    icon: RiFinanceMoneyDollarCircleLine,
     role: ["user"],
   },
 ];
