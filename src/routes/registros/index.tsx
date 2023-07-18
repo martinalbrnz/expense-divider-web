@@ -1,11 +1,11 @@
 import PocketBase from "pocketbase";
 import { For, Show, createSignal, onMount } from "solid-js";
 import { Title } from "solid-start";
-import { useIncomes } from "~/components/contexts/incomes";
+import { useRegisters } from "~/components/contexts/registers";
 import Paginator, { PaginatorData } from "~/components/shared/Paginator";
 
-const Ingresos = () => {
-  const [incomes, { setIncomes }]: any = useIncomes();
+const Registros = () => {
+  const [registers, { setRegisters }]: any = useRegisters();
   const pb = new PocketBase(import.meta.env.VITE_API_URL);
   const [paginatorData, setPaginatorData] = createSignal<PaginatorData>({
     page: 1,
@@ -14,9 +14,9 @@ const Ingresos = () => {
 
   const fetchRecords = async (pagination: PaginatorData) => {
     const records = await pb
-      .collection("income")
+      .collection("registers")
       .getList(pagination.page, pagination.perPage, {
-        expand: "user_id,category_id",
+        expand: "user_id,category",
         sort: "-date",
       });
 
@@ -27,7 +27,7 @@ const Ingresos = () => {
       totalItems,
       totalPages,
     });
-    setIncomes(items);
+    setRegisters(items);
   };
 
   const setPage = (page: number) => {
@@ -48,11 +48,11 @@ const Ingresos = () => {
 
   return (
     <>
-      <Title>Ingresos</Title>
+      <Title>Registros</Title>
 
       <div class="flex flex-col gap-4 m-4">
         <Show
-          when={incomes().length > 0}
+          when={registers().length > 0}
           fallback={
             <div class="p-4 m-4">
               <span>No hay registros</span>
@@ -60,17 +60,17 @@ const Ingresos = () => {
           }
         >
           <div class="flex flex-col gap-2 bg-gray-200 dark:bg-gray-800 p-4 rounded shadow">
-            <For each={incomes()}>
-              {(income, i) => (
+            <For each={registers()}>
+              {(register, i) => (
                 <div class="flex gap-4 items-center justify-between py-2 px-4 bg-white dark:bg-gray-600 rounded shadow-sm hover:shadow transition-all duration-200 text-black dark:text-gray-300">
                   <div class="rounded-full overflow-hidden">
                     <img
                       src={pb.getFileUrl(
-                        income.expand.user_id,
-                        income.expand.user_id.avatar,
+                        register.expand.user_id,
+                        register.expand.user_id.avatar,
                         { thumb: "100x100" }
                       )}
-                      alt={income.expand.user_id.username}
+                      alt={register.expand.user_id.username}
                       width={50}
                       height={50}
                     />
@@ -78,19 +78,27 @@ const Ingresos = () => {
                   <div class="flex flex-1 flex-col sm:flex-row items-center justify-between">
                     <div class="flex flex-col gap-1 align-start justify-start sm:justify-center w-full">
                       <span class="text-sm">
-                        {new Date(income.date).toLocaleString().split(",")[0]}
+                        {new Date(register.date).toLocaleString().split(",")[0]}
                       </span>
                       <span>
-                        ({income.expand.category_id.label}) {income.description}
+                        ({register.expand.category.label}){" "}
+                        {register.description}
                       </span>
                     </div>
-                    <div class="flex items-center justify-start sm:justify-between w-full sm:w-40 text-xl ">
+                    <div
+                      class="flex items-center justify-start sm:justify-between w-full sm:w-40 text-xl"
+                      classList={{
+                        "text-green-600": register.type === "income",
+                        "text-red-600": register.type === "outcome",
+                      }}
+                    >
                       <span>$</span>
                       <span>
+                        {register.type === "outcome" && "-"}
                         {new Intl.NumberFormat("es", {
                           minimumFractionDigits: 2,
                           maximumFractionDigits: 2,
-                        }).format(income.amount)}
+                        }).format(register.amount)}
                       </span>
                     </div>
                   </div>
@@ -110,4 +118,4 @@ const Ingresos = () => {
   );
 };
 
-export default Ingresos;
+export default Registros;

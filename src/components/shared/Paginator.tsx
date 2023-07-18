@@ -47,33 +47,35 @@ const Paginator = (props: PaginatorProps) => {
   };
 
   return (
-    <div class="flex gap-2 items-center justify-between bg-gray-200 dark:bg-gray-800 text-black dark:text-gray-300 p-4 rounded shadow">
-      <div class="flex items-center justify-center w-8 h-8">
-        <Show when={props.data.page !== 1}>
-          <RiArrowsArrowLeftCircleLine
-            onclick={() => props.setPage(props.data.page - 1)}
-            class="cursor-pointer text-2xl rounded-full"
-          />
-        </Show>
-      </div>
+    <Show when={props.data.totalPages && props.data.totalPages >= 2}>
+      <div class="flex gap-2 items-center justify-between bg-gray-200 dark:bg-gray-800 text-black dark:text-gray-300 p-4 rounded shadow">
+        <div class="flex items-center justify-center w-8 h-8">
+          <Show when={props.data.page !== 1}>
+            <RiArrowsArrowLeftCircleLine
+              onclick={() => props.setPage(props.data.page - 1)}
+              class="cursor-pointer text-2xl rounded-full"
+            />
+          </Show>
+        </div>
 
-      <div class="flex flex-1 items-center justify-start gap-1">
-        <Index each={getPages(props.data.page, props.data.totalPages)}>
-          {(page) => (
-            <PageItem data={props.data} i={page()} setPage={props.setPage} />
-          )}
-        </Index>
-      </div>
+        <div class="flex flex-1 items-center justify-start gap-1">
+          <Index each={getPages(props.data.page, props.data.totalPages)}>
+            {(page) => (
+              <PageItem data={props.data} i={page()} setPage={props.setPage} />
+            )}
+          </Index>
+        </div>
 
-      <div class="flex items-center justify-center w-8 h-8">
-        <Show when={props.data.page !== props.data.totalPages}>
-          <RiArrowsArrowRightCircleLine
-            onclick={() => props.setPage(props.data.page + 1)}
-            class="cursor-pointer text-2xl rounded-full"
-          />
-        </Show>
+        <div class="flex items-center justify-center w-8 h-8">
+          <Show when={props.data.page !== props.data.totalPages}>
+            <RiArrowsArrowRightCircleLine
+              onclick={() => props.setPage(props.data.page + 1)}
+              class="cursor-pointer text-2xl rounded-full"
+            />
+          </Show>
+        </div>
       </div>
-    </div>
+    </Show>
   );
 };
 
