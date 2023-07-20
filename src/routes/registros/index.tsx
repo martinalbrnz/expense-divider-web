@@ -2,11 +2,14 @@ import PocketBase from "pocketbase";
 import { For, Show, createSignal, onMount } from "solid-js";
 import { Title } from "solid-start";
 import { useRegisters } from "~/components/contexts/registers";
+import ListHeader from "~/components/shared/ListHeader";
 import Paginator, { PaginatorData } from "~/components/shared/Paginator";
 
 const Registros = () => {
   const [registers, { setRegisters }]: any = useRegisters();
   const pb = new PocketBase(import.meta.env.VITE_API_URL);
+  const [gridView, setGridview] = createSignal<boolean>(false);
+  const [selectedDate, setSelecteDate] = createSignal(Date.now());
   const [paginatorData, setPaginatorData] = createSignal<PaginatorData>({
     page: 1,
     perPage: 10,
@@ -51,6 +54,7 @@ const Registros = () => {
       <Title>Registros</Title>
 
       <div class="flex flex-col gap-4 m-4">
+        <ListHeader setGridView={(grid: boolean) => setGridview(grid)} />
         <Show
           when={registers().length > 0}
           fallback={
@@ -89,12 +93,12 @@ const Registros = () => {
                       class="flex items-center justify-start sm:justify-between w-full sm:w-40 text-xl"
                       classList={{
                         "text-green-600": register.type === "income",
-                        "text-red-600": register.type === "outcome",
+                        "text-red-500": register.type === "expense",
                       }}
                     >
                       <span>$</span>
                       <span>
-                        {register.type === "outcome" && "-"}
+                        {register.type === "expense" && "-"}
                         {new Intl.NumberFormat("es", {
                           minimumFractionDigits: 2,
                           maximumFractionDigits: 2,
@@ -108,11 +112,15 @@ const Registros = () => {
           </div>
         </Show>
 
-        <Paginator
-          data={paginatorData()}
-          setPage={setPage}
-          setPerPage={setPerPage}
-        />
+        <Show
+          when={paginatorData().totalPages && paginatorData().totalPages! >= 2}
+        >
+          <Paginator
+            data={paginatorData()}
+            setPage={setPage}
+            setPerPage={setPerPage}
+          />
+        </Show>
       </div>
     </>
   );
