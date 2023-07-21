@@ -1,11 +1,11 @@
 import { createForm } from "@felte/solid";
 import { Navigate } from "@solidjs/router";
-import { createSignal } from "solid-js";
 import { useNavigate } from "solid-start";
+import { useCurrentUser } from "~/components/contexts/user";
 import { pb } from "~/services/pocketbase";
 
 const Login = () => {
-  const [auth] = createSignal(pb.authStore.isValid);
+  const [user, { setCurrentUser }]: any = useCurrentUser();
 
   const navigate = useNavigate();
 
@@ -15,6 +15,7 @@ const Login = () => {
       .authWithPassword(user, password);
 
     if (authData.token) {
+      setCurrentUser(pb.authStore.model);
       navigate("/", { replace: true });
     }
   };
@@ -25,7 +26,7 @@ const Login = () => {
     },
   });
 
-  if (auth()) {
+  if (user()) {
     return <Navigate href="/" />;
   }
   return (
@@ -36,7 +37,6 @@ const Login = () => {
             text-gray-800 dark:text-gray-300 font-medium
             w-2/3 max-w-sm"
         >
-          <pre>{auth()}</pre>
           <form ref={form} class="flex flex-col gap-6">
             <div class="flex flex-col">
               <label>Email o usuario</label>

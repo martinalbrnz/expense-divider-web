@@ -1,7 +1,7 @@
 import { Record } from "pocketbase";
 import { RiUserFacesUser3Line } from "solid-icons/ri";
 import { Show, createSignal, onMount } from "solid-js";
-import { Navigate, Title } from "solid-start";
+import { Navigate, Title, useNavigate } from "solid-start";
 import { pb } from "~/services/pocketbase";
 
 const User = () => {
@@ -11,12 +11,18 @@ const User = () => {
     console.log(user());
   });
 
+  const logout = () => {
+    pb.authStore.clear();
+    const navigate = useNavigate();
+    navigate("/", { replace: true });
+  };
+
   if (!user()) return <Navigate href={"/"}></Navigate>;
   return (
     <>
       <Title>{user().name}</Title>
 
-      <div class="flex flex-col gap-4 m-4">
+      <div class="flex flex-col gap-4 m-4 text-gray-800 dark:text-gray-300">
         <Show when={user()} fallback={<div>Cargando...</div>}>
           <div
             class="flex flex-col sm:flex-row gap-4 items-center 
@@ -38,7 +44,7 @@ const User = () => {
             </div>
             <div
               class="relative flex flex-col gap-2 flex-1
-              text-center sm:text-start text-gray-800 dark:text-gray-300"
+              text-center sm:text-start"
             >
               <span class="font-bold text-4xl">{user().name}</span>
               <span class="font-medium text-lg">{user().username}</span>
@@ -52,6 +58,18 @@ const User = () => {
             </div>
           </div>
         </Show>
+
+        <div
+          class="flex gap-4 items-center 
+            bg-gray-200 dark:bg-gray-800 p-4 rounded shadow"
+        >
+          <button
+            onClick={logout}
+            class="bg-red-600 rounded px-2 py-1 font-medium"
+          >
+            Cerrar sesión
+          </button>
+        </div>
       </div>
     </>
   );
