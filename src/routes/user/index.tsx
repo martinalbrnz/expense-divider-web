@@ -48,24 +48,24 @@ const User = () => {
             >
               <span class="font-bold text-4xl">{user().name}</span>
               <span class="font-medium text-lg">{user().username}</span>
-              {/* <div
-                class="flex items-center justify-center h-8 w-8
-                text-2xl hover:bg-black hover:bg-opacity-10
-                rounded-full cursor-pointer"
-              >
-                <RiDesignEditLine />
-              </div> */}
             </div>
           </div>
         </Show>
 
         <div
-          class="flex gap-4 items-center 
+          class="flex gap-4 items-center justify-end
             bg-gray-200 dark:bg-gray-800 p-4 rounded shadow"
         >
           <button
+            class="bg-gray-600 text-gray-100 rounded px-2 py-1 font-medium"
+            disabled
+          >
+            Editar perfil
+          </button>
+
+          <button
             onClick={logout}
-            class="bg-red-600 rounded px-2 py-1 font-medium"
+            class="bg-red-600 text-gray-100 rounded px-2 py-1 font-medium"
           >
             Cerrar sesión
           </button>
