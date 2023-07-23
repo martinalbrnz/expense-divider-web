@@ -50,7 +50,7 @@ const Registros = () => {
   };
 
   createEffect(
-    on(selectedDate, (_) => {
+    on(selectedDate, () => {
       fetchRecords(paginatorData());
     })
   );

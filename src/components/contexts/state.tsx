@@ -10,10 +10,13 @@ export interface StateProviderI {
 }
 
 export const StateProvider = (props: StateProviderI) => {
+  const prefersDark =
+    window.matchMedia &&
+    window.matchMedia("(prefers-color-scheme: dark)").matches;
   return (
     <UserProvider user={pb.authStore.model as Record}>
       <RegistersProvider registers={[]}>
-        <ThemeProvider isDark={false}>{props.children}</ThemeProvider>
+        <ThemeProvider isDark={prefersDark}>{props.children}</ThemeProvider>
       </RegistersProvider>
     </UserProvider>
   );
