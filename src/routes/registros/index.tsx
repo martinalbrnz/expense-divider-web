@@ -1,14 +1,17 @@
 import { endOfMonth, format, startOfMonth } from "date-fns";
-import PocketBase from "pocketbase";
+import { RiSystemAddCircleFill } from "solid-icons/ri";
 import { For, Show, createEffect, createSignal, on } from "solid-js";
 import { Title } from "solid-start";
+import RegisterForm from "~/components/RegisterForm";
 import { useRegisters } from "~/components/contexts/registers";
 import ListHeader from "~/components/shared/ListHeader";
 import Paginator, { PaginatorData } from "~/components/shared/Paginator";
+import { pb } from "~/services/pocketbase";
 
 const Registros = () => {
   const [registers, { setRegisters }]: any = useRegisters();
-  const pb = new PocketBase(import.meta.env.VITE_API_URL);
+
+  const [showForm, setShowForm] = createSignal<boolean>(false);
   const [selectedDate, setSelectedDate] = createSignal(Date.now());
   const [paginatorData, setPaginatorData] = createSignal<PaginatorData>({
     page: 1,
@@ -133,6 +136,18 @@ const Registros = () => {
             setPerPage={setPerPage}
           />
         </Show>
+
+        <div
+          class="absolute right-6 bottom-[34px]
+            flex items-center justify-center text-4xl
+            rounded-full w-12 h-12 shadow-lg
+            bg-green-600 text-gray-200 cursor-pointer"
+        >
+          <Show when={showForm()}>
+            <RegisterForm close={() => setShowForm(false)} />
+          </Show>
+          <RiSystemAddCircleFill onclick={() => setShowForm((show) => !show)} />
+        </div>
       </div>
     </>
   );

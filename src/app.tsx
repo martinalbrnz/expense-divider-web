@@ -4,10 +4,10 @@ import Header from "./components/layout/header";
 import Nav from "./components/layout/nav";
 
 const App = () => {
-  const [isDark, { toggleTheme }]: any = useTheme();
+  const [isDark]: any = useTheme();
   return (
     <div
-      class="flex h-[100svh] md:h-screen w-screen ring ring-red-600"
+      class="flex h-[100svh] md:h-screen w-screen"
       classList={{ dark: isDark() }}
     >
       <Nav />

@@ -12,7 +12,6 @@ export interface Register {
 export interface RegisterCategory {
 	id: string
 	label: string
-	short_name: string
 }
 
 export type RegisterType = 'income' | 'expense' 
