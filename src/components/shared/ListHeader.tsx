@@ -1,5 +1,10 @@
-import { format } from "date-fns";
-import { RiDesignGridFill, RiEditorListCheck } from "solid-icons/ri";
+import { addMonths, format, subMonths } from "date-fns";
+import {
+  RiArrowsArrowLeftCircleLine,
+  RiArrowsArrowRightCircleLine,
+  RiDesignGridFill,
+  RiEditorListCheck,
+} from "solid-icons/ri";
 import { Show } from "solid-js";
 
 export interface HeaderProps {
@@ -19,6 +24,7 @@ const ListHeader = (props: HeaderProps) => {
     const MS_IN_MINUTE = 1000 * 60;
 
     if (props.setSelectedDate) {
+      // To avoid strange Timezone bugs (:
       const offset = new Date(
         (e?.target as HTMLInputElement).value
       ).getTimezoneOffset();
@@ -30,16 +36,35 @@ const ListHeader = (props: HeaderProps) => {
     }
   };
 
+  const previousMonth = () => {
+    props.setSelectedDate!(subMonths(props.selectedDate!, 1).getTime());
+  };
+
+  const nextMonth = () => {
+    props.setSelectedDate!(addMonths(props.selectedDate!, 1).getTime());
+  };
+
   return (
     <>
       <div class="flex items-center justify-between gap-2 bg-gray-200 dark:bg-gray-800 p-4 rounded shadow">
         <Show when={props.selectedDate}>
-          <input
-            type="month"
-            class="px-2 py-1 rounded outline-none"
-            value={formatSelectedDate(props.selectedDate!)}
-            onChange={handleSelectedDateChange}
-          />
+          <div class="flex items-center justify-center gap-2 ">
+            <RiArrowsArrowLeftCircleLine
+              onclick={previousMonth}
+              class="cursor-pointer text-2xl rounded-full"
+            />
+            <input
+              type="month"
+              class="px-2 py-1 rounded outline-none shadow
+              bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300"
+              value={formatSelectedDate(props.selectedDate!)}
+              onChange={handleSelectedDateChange}
+            />
+            <RiArrowsArrowRightCircleLine
+              onclick={nextMonth}
+              class="cursor-pointer text-2xl rounded-full"
+            />
+          </div>
         </Show>
 
         <Show when={props.gridView !== undefined}>

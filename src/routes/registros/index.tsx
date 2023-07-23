@@ -1,5 +1,6 @@
+import { endOfMonth, format, startOfMonth } from "date-fns";
 import PocketBase from "pocketbase";
-import { For, Show, createSignal, onMount } from "solid-js";
+import { For, Show, createEffect, createSignal, on } from "solid-js";
 import { Title } from "solid-start";
 import { useRegisters } from "~/components/contexts/registers";
 import ListHeader from "~/components/shared/ListHeader";
@@ -19,6 +20,9 @@ const Registros = () => {
     const records = await pb
       .collection("registers")
       .getList(pagination.page, pagination.perPage, {
+        filter: `
+        date >= "${format(startOfMonth(selectedDate()), "yyyy-MM-dd")}"
+        && date <= "${format(endOfMonth(selectedDate()), "yyyy-MM-dd")}"`,
         expand: "user_id,category",
         sort: "-date",
       });
@@ -45,15 +49,17 @@ const Registros = () => {
     fetchRecords({ page: paginatorData().page, perPage });
   };
 
-  onMount(() => {
-    fetchRecords(paginatorData());
-  });
+  createEffect(
+    on(selectedDate, (_) => {
+      fetchRecords(paginatorData());
+    })
+  );
 
   return (
     <>
       <Title>Registros</Title>
 
-      <div class="flex flex-col gap-4 m-4">
+      <div class="flex flex-col gap-4 m-4 text-gray-800 dark:text-gray-300">
         <ListHeader
           selectedDate={selectedDate()}
           setSelectedDate={(date: number) => setSelectedDate(date)}
@@ -63,15 +69,19 @@ const Registros = () => {
         <Show
           when={registers().length > 0}
           fallback={
-            <div class="p-4 m-4">
+            <div class=" p-4 m-4">
               <span>No hay registros</span>
             </div>
           }
         >
-          <div class="flex flex-col gap-2 bg-gray-200 dark:bg-gray-800 p-4 rounded shadow">
+          <div
+            class="flex flex-col gap-2
+              bg-gray-200 dark:bg-gray-800
+              p-4 rounded shadow"
+          >
             <For each={registers()}>
-              {(register, i) => (
-                <div class="flex gap-4 items-center justify-between py-2 px-4 bg-white dark:bg-gray-600 rounded shadow-sm hover:shadow transition-all duration-200 text-gray-800 dark:text-gray-300">
+              {(register) => (
+                <div class="flex gap-4 items-center justify-between py-2 px-4 bg-white dark:bg-gray-600 rounded shadow-sm hover:shadow transition-all duration-200">
                   <div class="rounded-full overflow-hidden">
                     <img
                       src={pb.getFileUrl(

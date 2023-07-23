@@ -12,8 +12,9 @@ const Avatar = () => {
     <Show when={user()}>
       <A
         href="/user"
-        class="flex items-center justify-center
-      bg-gray-200 h-14 w-14 border border-black border-opacity-30 rounded-full overflow-hidden shadow-sm"
+        class="flex items-center justify-center select-none h-14 w-14
+          border border-black border-opacity-30 bg-gray-200
+          rounded-full overflow-hidden shadow-sm"
       >
         <Show
           when={user() && user()?.avatar}
