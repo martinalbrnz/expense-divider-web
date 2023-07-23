@@ -19,6 +19,7 @@
     "@felte/solid": "^1.2.7",
     "@solidjs/meta": "^0.28.2",
     "@solidjs/router": "^0.8.2",
+    "date-fns": "^2.30.0",
     "pocketbase": "^0.15.3",
     "solid-icons": "^1.0.9",
     "solid-js": "^1.7.2",

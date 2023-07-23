@@ -9,7 +9,7 @@ const Registros = () => {
   const [registers, { setRegisters }]: any = useRegisters();
   const pb = new PocketBase(import.meta.env.VITE_API_URL);
   const [gridView, setGridview] = createSignal<boolean>(false);
-  const [selectedDate, setSelecteDate] = createSignal(Date.now());
+  const [selectedDate, setSelectedDate] = createSignal(Date.now());
   const [paginatorData, setPaginatorData] = createSignal<PaginatorData>({
     page: 1,
     perPage: 10,
@@ -54,7 +54,12 @@ const Registros = () => {
       <Title>Registros</Title>
 
       <div class="flex flex-col gap-4 m-4">
-        <ListHeader setGridView={(grid: boolean) => setGridview(grid)} />
+        <ListHeader
+          selectedDate={selectedDate()}
+          setSelectedDate={(date: number) => setSelectedDate(date)}
+          gridView={gridView()}
+          setGridView={(grid: boolean) => setGridview(grid)}
+        />
         <Show
           when={registers().length > 0}
           fallback={
