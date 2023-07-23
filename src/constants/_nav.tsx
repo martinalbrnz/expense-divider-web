@@ -7,9 +7,16 @@ import { NavItemI } from "~/models/navItem.model";
 import { RoutesEnum } from "./routes";
 export const navRoutes: NavItemI[] = [
   {
+    path: RoutesEnum.Home,
+    label: "Inicio",
+    icon: RiBuildingsHome4Line,
+    role: ["user"],
+  },
+  {
     path: "",
     label: "Inicio",
     icon: RiBuildingsHome4Line,
+    role: ["guest"],
   },
   {
     path: RoutesEnum.Login,
