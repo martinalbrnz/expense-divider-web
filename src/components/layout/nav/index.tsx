@@ -1,13 +1,13 @@
 import { HiOutlineBars3 } from "solid-icons/hi";
 import { createSignal } from "solid-js";
 import { For } from "solid-js/web";
+import { useCurrentUser } from "~/components/contexts/user";
 import { navRoutes } from "~/constants/_nav";
 import NavItem from "./nav-item";
 
 const Nav = () => {
+  const [user] = useCurrentUser();
   const [extendSidebar, setExtendSidebar] = createSignal<boolean>(false);
-
-  const role = "user";
 
   return (
     <nav
@@ -35,7 +35,7 @@ const Nav = () => {
             <NavItem
               route={route}
               extendSidebar={extendSidebar()}
-              role={role}
+              role={user() ? "user" : "guest"}
             />
           )}
         </For>

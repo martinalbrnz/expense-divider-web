@@ -2,7 +2,6 @@ import { Record } from "pocketbase";
 import {
   Accessor,
   JSX,
-  Setter,
   createContext,
   createSignal,
   useContext,
@@ -39,9 +38,6 @@ export function UserProvider(props: UserProviderProps) {
   );
 }
 
-export function useCurrentUser(): [
-  Accessor<Record | undefined>,
-  Setter<unknown>
-] {
+export function useCurrentUser(): [Accessor<Record | undefined>, any] {
   return useContext<any>(UserContext);
 }

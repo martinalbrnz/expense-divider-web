@@ -1,26 +1,21 @@
 import { Record } from "pocketbase";
 import { RiUserFacesUser3Line } from "solid-icons/ri";
-import { Show, createSignal, onMount } from "solid-js";
-import { Navigate, Title, useNavigate } from "solid-start";
+import { Show } from "solid-js";
+import { Title, useNavigate } from "solid-start";
+import { useCurrentUser } from "~/components/contexts/user";
 import { pb } from "~/services/pocketbase";
 
 const User = () => {
-  const [user] = createSignal(pb.authStore.model as Record);
+  const [user, { logout }] = useCurrentUser();
+  const navigate = useNavigate();
 
-  onMount(() => {
-    console.log(user());
-  });
-
-  const logout = () => {
-    pb.authStore.clear();
-    const navigate = useNavigate();
+  if (!user()) {
     navigate("/", { replace: true });
-  };
+  }
 
-  if (!user()) return <Navigate href={"/"}></Navigate>;
   return (
     <>
-      <Title>{user().name}</Title>
+      <Title>{user()?.name}</Title>
 
       <div class="flex flex-col gap-4 m-4 text-gray-800 dark:text-gray-300">
         <Show when={user()} fallback={<div>Cargando...</div>}>
@@ -30,13 +25,13 @@ const User = () => {
           >
             <div class="flex items-center justify-center border-4 border-opacity-60 border-secondary-600 rounded max-w-xs aspect-square">
               <Show
-                when={user().avatar}
+                when={user()?.avatar}
                 fallback={
                   <RiUserFacesUser3Line class="text-9xl text-gray-400 p-10 bg-gray-600 w-full h-full" />
                 }
               >
                 <img
-                  src={pb.getFileUrl(user() as Record, user().avatar)}
+                  src={pb.getFileUrl(user() as Record, user()?.avatar)}
                   alt={user()?.name}
                   class="h-full w-full"
                 />
@@ -46,8 +41,8 @@ const User = () => {
               class="relative flex flex-col gap-2 flex-1
               text-center sm:text-start"
             >
-              <span class="font-bold text-4xl">{user().name}</span>
-              <span class="font-medium text-lg">{user().username}</span>
+              <span class="font-bold text-4xl">{user()?.name}</span>
+              <span class="font-medium text-lg">{user()?.username}</span>
             </div>
           </div>
         </Show>
