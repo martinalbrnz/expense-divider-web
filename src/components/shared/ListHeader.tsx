@@ -9,12 +9,16 @@ import { Show } from "solid-js";
 
 export interface HeaderProps {
   selectedDate?: number;
-  setSelectedDate?: (d: number) => void;
+  setSelectedDate?: (n: number) => void;
+  takeItems?: number;
+  setTakeItems?: (n: number) => void;
   gridView?: boolean;
   setGridView?: (b: boolean) => void;
 }
 
 const ListHeader = (props: HeaderProps) => {
+  const takeOptions = [5, 10, 20, 50];
+
   const formatSelectedDate = (date: number): string => {
     return format(date, "yyyy-MM");
   };
@@ -46,9 +50,13 @@ const ListHeader = (props: HeaderProps) => {
 
   return (
     <>
-      <div class="flex items-center justify-between gap-2 bg-gray-200 dark:bg-gray-800 p-4 rounded shadow">
+      <div
+        class="flex items-center justify-between gap-2
+        bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-300
+        p-4 rounded shadow"
+      >
         <Show when={props.selectedDate}>
-          <div class="flex items-center justify-center gap-2 ">
+          <div class="flex flex-1 items-center justify-center gap-3">
             <RiArrowsArrowLeftCircleLine
               onclick={previousMonth}
               class="cursor-pointer text-2xl rounded-full"
@@ -56,7 +64,7 @@ const ListHeader = (props: HeaderProps) => {
             <input
               type="month"
               class="px-2 py-1 rounded outline-none shadow
-              bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-300"
+                bg-gray-100 dark:bg-gray-700"
               value={formatSelectedDate(props.selectedDate!)}
               onChange={handleSelectedDateChange}
             />
@@ -67,19 +75,36 @@ const ListHeader = (props: HeaderProps) => {
           </div>
         </Show>
 
+        <Show when={props.takeItems}>
+          <select
+            class="px-2 py-1 rounded outline-none shadow
+                bg-gray-100 dark:bg-gray-700"
+          >
+            {takeOptions.map((opt) => {
+              return (
+                <option onClick={() => props.setTakeItems!(opt)}>
+                  {opt} por página
+                </option>
+              );
+            })}
+          </select>
+        </Show>
+
         <Show when={props.gridView !== undefined}>
-          <div class="flex rounded bg-gray-500 p-0">
+          <div class="flex rounded bg-gray-500 p-0 text-gray-200 cursor-pointer">
             <div
-              class="flex items-center text-3xl justify-center text-gray-200 rounded-s"
-              classList={{ "bg-primary-600": !props.gridView }}
+              class="flex items-center text-3xl justify-center rounded-s"
+              classList={{ "bg-primary-700": !props.gridView }}
               onclick={() => props.setGridView!(false)}
             >
               <RiEditorListCheck />
             </div>
 
             <div
-              class="flex items-center text-3xl justify-center text-gray-200 rounded-e"
-              classList={{ "bg-primary-600": props.gridView }}
+              class="flex items-center text-3xl justify-center rounded-e"
+              classList={{
+                "bg-primary-700": props.gridView,
+              }}
               onclick={() => props.setGridView!(true)}
             >
               <RiDesignGridFill />

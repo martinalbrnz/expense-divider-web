@@ -9,7 +9,6 @@ import Paginator, { PaginatorData } from "~/components/shared/Paginator";
 const Registros = () => {
   const [registers, { setRegisters }]: any = useRegisters();
   const pb = new PocketBase(import.meta.env.VITE_API_URL);
-  const [gridView, setGridview] = createSignal<boolean>(false);
   const [selectedDate, setSelectedDate] = createSignal(Date.now());
   const [paginatorData, setPaginatorData] = createSignal<PaginatorData>({
     page: 1,
@@ -63,8 +62,6 @@ const Registros = () => {
         <ListHeader
           selectedDate={selectedDate()}
           setSelectedDate={(date: number) => setSelectedDate(date)}
-          gridView={gridView()}
-          setGridView={(grid: boolean) => setGridview(grid)}
         />
         <Show
           when={registers().length > 0}
