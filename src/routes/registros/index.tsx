@@ -11,7 +11,7 @@ import { pb } from "~/services/pocketbase";
 const Registros = () => {
   const [registers, { setRegisters }]: any = useRegisters();
 
-  const [showForm, setShowForm] = createSignal<boolean>(false);
+  const [showForm, setShowForm] = createSignal<boolean>(true);
   const [selectedDate, setSelectedDate] = createSignal(Date.now());
   const [paginatorData, setPaginatorData] = createSignal<PaginatorData>({
     page: 1,

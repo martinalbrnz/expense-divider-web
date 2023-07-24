@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@felte/solid": "^1.2.7",
+    "@modular-forms/solid": "^0.19.0",
     "@solidjs/meta": "^0.28.2",
     "@solidjs/router": "^0.8.2",
     "date-fns": "^2.30.0",
