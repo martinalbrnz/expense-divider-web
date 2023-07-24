@@ -1,8 +1,15 @@
-import { createForm, minLength, required } from "@modular-forms/solid";
+import {
+  SubmitHandler,
+  createForm,
+  minLength,
+  required,
+} from "@modular-forms/solid";
 import { RiSystemCloseCircleFill } from "solid-icons/ri";
-import { createSignal, onMount } from "solid-js";
+import { For, createSignal, onMount } from "solid-js";
 import { RegisterCategory, RegisterType } from "~/models/register.model";
+import { User } from "~/models/user.model";
 import { pb } from "~/services/pocketbase";
+import { useCurrentUser } from "./contexts/user";
 import Modal from "./shared/Modal";
 
 export interface RegisterFormProps {
@@ -16,19 +23,21 @@ type RegistersForm = {
   amount: number;
   user_id: string;
   category: string;
-  receipt?: File;
+  // receipt?: File;
 };
 
 export default function RegisterForm(props: RegisterFormProps) {
+  const [currentUser] = useCurrentUser();
   const [registersForm, { Form, Field }] = createForm<RegistersForm>();
 
   const [registerCategories, setRegisterCategories] = createSignal<
     RegisterCategory[]
   >([]);
+  const [users, setUsers] = createSignal<Record<string, User>[]>([]);
 
   const fetchRegisterCategory = async () => {
     const categories = (
-      await pb.collection("register_category").getFullList({})
+      await pb.collection("register_category").getFullList()
     ).map((register) => {
       return {
         id: register.id,
@@ -39,13 +48,24 @@ export default function RegisterForm(props: RegisterFormProps) {
     setRegisterCategories(categories as RegisterCategory[]);
   };
 
-  const createRegister = async () => {
-    console.log(registersForm);
+  const fetchUsers = async () => {
+    const users = await pb.collection("users").getFullList();
+    setUsers(users);
   };
 
   onMount(() => {
     fetchRegisterCategory();
+    fetchUsers();
   });
+
+  const submitRegister: SubmitHandler<RegistersForm> = async (
+    values,
+    event
+  ) => {
+    console.log(values);
+    const record = await pb.collection("registers").create(values);
+    if (record.id) props.close();
+  };
 
   return (
     <>
@@ -61,8 +81,12 @@ export default function RegisterForm(props: RegisterFormProps) {
 
           <h2 class="font-semibold text-2xl">Crear nuevo registro</h2>
 
-          <Form onSubmit={createRegister}>
-            <Field name="date" type="Date">
+          <Form onSubmit={submitRegister}>
+            <Field
+              name="date"
+              type="Date"
+              validate={[required("Este campo es requerido")]}
+            >
               {(field, props) => (
                 <div class="flex flex-col gap-0.5">
                   <label class="font-medium">Fecha</label>
@@ -96,6 +120,7 @@ export default function RegisterForm(props: RegisterFormProps) {
                   <input
                     {...props}
                     name="description"
+                    placeholder="Breve descripción del registro"
                     class="px-2 py-1 border dark:border-gray-900 rounded outline-none shadow bg-gray-100 dark:bg-gray-700 focus:border-primary-600"
                     classList={{
                       "border-red-600 text-red-600": !!field.error,
@@ -109,7 +134,11 @@ export default function RegisterForm(props: RegisterFormProps) {
               )}
             </Field>
 
-            <Field name="amount" type="number">
+            <Field
+              name="amount"
+              type="number"
+              validate={[required("Este campo es requerido")]}
+            >
               {(field, props) => (
                 <div class="flex flex-col gap-0.5">
                   <label class="font-medium">Monto</label>
@@ -118,6 +147,7 @@ export default function RegisterForm(props: RegisterFormProps) {
                     {...props}
                     name="amount"
                     type="number"
+                    placeholder="Monto del registro"
                     class="px-2 py-1 border dark:border-gray-900 rounded outline-none shadow bg-gray-100 dark:bg-gray-700 focus:border-primary-600"
                     classList={{
                       "border-red-600 text-red-600": !!field.error,
@@ -130,7 +160,14 @@ export default function RegisterForm(props: RegisterFormProps) {
               )}
             </Field>
 
-            <Field name="category" type="string">
+            <Field
+              name="category"
+              type="string"
+              validate={[
+                required("Este campo es requerido"),
+                minLength(2, "Este campo es requerido"),
+              ]}
+            >
               {(field, props) => (
                 <div class="flex flex-col gap-0.5">
                   <label class="font-medium">Categoría de registro</label>
@@ -139,12 +176,17 @@ export default function RegisterForm(props: RegisterFormProps) {
                     name="category"
                     class="px-2 py-1 border dark:border-gray-900 rounded outline-none shadow bg-gray-100 dark:bg-gray-700 focus:border-primary-600"
                     classList={{
-                      "border-red-600 text-red-600": !!field.error,
+                      "border-red-600": !!field.error,
                     }}
                   >
-                    <option value="null" selected disabled>
+                    <option value="0" selected disabled>
                       Seleccione una opción
                     </option>
+                    <For each={registerCategories()}>
+                      {(category) => (
+                        <option value={category.id}>{category.label}</option>
+                      )}
+                    </For>
                   </select>
                   {field.error && (
                     <span class="text-sm text-red-600">{field.error}</span>
@@ -179,14 +221,22 @@ export default function RegisterForm(props: RegisterFormProps) {
               {(field, props) => (
                 <div class="flex flex-col gap-0.5">
                   <label class="font-medium">Usuario</label>
-                  <input
+                  <select
                     {...props}
                     name="user_id"
                     class="px-2 py-1 border dark:border-gray-900 rounded outline-none shadow bg-gray-100 dark:bg-gray-700 focus:border-primary-600"
                     classList={{
                       "border-red-600 text-red-600": !!field.error,
                     }}
-                  />
+                  >
+                    <For each={users()}>
+                      {(user) => (
+                        <option value={user.id.toString()}>
+                          {user.name.toString()}
+                        </option>
+                      )}
+                    </For>
+                  </select>
                   {field.error && (
                     <span class="text-sm text-red-600">{field.error}</span>
                   )}
@@ -194,7 +244,7 @@ export default function RegisterForm(props: RegisterFormProps) {
               )}
             </Field>
 
-            <Field name="receipt" type="File">
+            {/* <Field name="receipt" type="File">
               {(field, props) => (
                 <div class="flex flex-col gap-0.5">
                   <label class="font-medium">Foto del recibo (opcional)</label>
@@ -212,7 +262,7 @@ export default function RegisterForm(props: RegisterFormProps) {
                   )}
                 </div>
               )}
-            </Field>
+            </Field> */}
 
             <button
               type="submit"
