@@ -3,6 +3,7 @@ import {
   createForm,
   minLength,
   required,
+  reset,
 } from "@modular-forms/solid";
 import { RiSystemCloseCircleFill } from "solid-icons/ri";
 import { For, createSignal, onMount } from "solid-js";
@@ -17,7 +18,7 @@ export interface RegisterFormProps {
 }
 
 type RegistersForm = {
-  date: Date;
+  date: string;
   description: string;
   type: RegisterType;
   amount: number;
@@ -27,8 +28,8 @@ type RegistersForm = {
 };
 
 export default function RegisterForm(props: RegisterFormProps) {
-  const [currentUser] = useCurrentUser();
-  const [registersForm, { Form, Field }] = createForm<RegistersForm>();
+  const [currentUser]: any = useCurrentUser();
+  const [registersForm, { Form, Field }] = createForm<RegistersForm>({});
 
   const [registerCategories, setRegisterCategories] = createSignal<
     RegisterCategory[]
@@ -54,6 +55,12 @@ export default function RegisterForm(props: RegisterFormProps) {
   };
 
   onMount(() => {
+    reset(registersForm, ["user_id", "date"], {
+      initialValues: {
+        user_id: currentUser()!.id,
+        date: new Date().toISOString().split("T")[0],
+      },
+    });
     fetchRegisterCategory();
     fetchUsers();
   });
@@ -63,8 +70,8 @@ export default function RegisterForm(props: RegisterFormProps) {
     event
   ) => {
     console.log(values);
-    const record = await pb.collection("registers").create(values);
-    if (record.id) props.close();
+    // const record = await pb.collection("registers").create(values);
+    // if (record.id) props.close();
   };
 
   return (
@@ -82,22 +89,20 @@ export default function RegisterForm(props: RegisterFormProps) {
           <h2 class="font-semibold text-2xl">Crear nuevo registro</h2>
 
           <Form onSubmit={submitRegister}>
-            <Field
-              name="date"
-              type="Date"
-              validate={[required("Este campo es requerido")]}
-            >
+            <Field name="date" validate={[required("Este campo es requerido")]}>
               {(field, props) => (
                 <div class="flex flex-col gap-0.5">
                   <label class="font-medium">Fecha</label>
+
                   <input
                     {...props}
-                    name="date"
                     type="date"
+                    value={field.value}
                     class="px-2 py-1 border dark:border-gray-900 rounded outline-none shadow bg-gray-100 dark:bg-gray-700 focus:border-primary-600"
                     classList={{
                       "border-red-600 text-red-600": !!field.error,
                     }}
+                    required
                   />
                   {field.error && (
                     <span class="text-sm text-red-600">{field.error}</span>
@@ -223,7 +228,6 @@ export default function RegisterForm(props: RegisterFormProps) {
                   <label class="font-medium">Usuario</label>
                   <select
                     {...props}
-                    name="user_id"
                     class="px-2 py-1 border dark:border-gray-900 rounded outline-none shadow bg-gray-100 dark:bg-gray-700 focus:border-primary-600"
                     classList={{
                       "border-red-600 text-red-600": !!field.error,
@@ -231,7 +235,10 @@ export default function RegisterForm(props: RegisterFormProps) {
                   >
                     <For each={users()}>
                       {(user) => (
-                        <option value={user.id.toString()}>
+                        <option
+                          value={user.id.toString()}
+                          selected={user.id.toString() === currentUser().id}
+                        >
                           {user.name.toString()}
                         </option>
                       )}
