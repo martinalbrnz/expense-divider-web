@@ -1,6 +1,7 @@
 import { format } from "date-fns";
 import { Show, createSignal, onMount } from "solid-js";
-import { useParams } from "solid-start";
+import { A, useParams } from "solid-start";
+import { RoutesEnum } from "~/constants/routes";
 import { UserRecord } from "~/models/authUser.model";
 import { CategoryRecord } from "~/models/category.model";
 import { RegisterType } from "~/models/register.model";
@@ -33,9 +34,11 @@ export default function ItemRegistro() {
         expand: "user_id,category",
       });
 
-    console.log({ ...record });
-
     setRegister(record);
+  };
+
+  const editRegister = () => {
+    alert("¡Oopsie! ¡Aún no está implementado! 🙀");
   };
 
   onMount(() => fetchItem());
@@ -54,7 +57,7 @@ export default function ItemRegistro() {
 				bg-gray-200 dark:bg-gray-800
 				p-4 rounded shadow"
         >
-          <div class="flex gap-2 items-center justify-between">
+          <div class="flex gap-2 items-center justify-between px-8">
             <div class="flex flex-col gap-1 items-center justify-center">
               <div class="rounded-full overflow-hidden">
                 <Show when={register()!.expand.user_id.avatar}>
@@ -97,41 +100,70 @@ export default function ItemRegistro() {
             </div>
           </div>
 
-          <div class="flex justify-between">
-            <div class="flex flex-col items-start gap-2 italic">
-              <Show when={register()!.created}>
-                <span>
-                  Creado:{" "}
-                  <span class="font-semibold">
-                    {format(new Date(register()!.created), "hh:mm dd/MM/yyyy")}
-                  </span>
-                </span>
-              </Show>
-
-              <Show when={register()!.updated !== register()!.created}>
-                <span>
-                  Editado:{" "}
-                  <span class="font-semibold">
-                    {format(new Date(register()!.updated), "hh:mm dd/MM/yyyy")}
-                  </span>
-                </span>
-              </Show>
-
-              <span>
-                Categoría:{" "}
+          <div class="flex flex-col justify-between px-4">
+            <Show when={register()!.created}>
+              <div
+                class="flex items-center justify-between px-4 py-1
+              border-b border-gray-300 dark:border-gray-500 last-of-type:border-b-0"
+              >
+                <span>Creado: </span>
                 <span class="font-semibold">
-                  {register()!.expand.category.label}
+                  {format(new Date(register()!.created), "hh:mm dd/MM/yyyy")}
                 </span>
-              </span>
+              </div>
+            </Show>
 
-              <span>
-                Descripción:{" "}
-                <span class="font-semibold">{register()!.description}</span>
+            <Show when={register()!.updated !== register()!.created}>
+              <div
+                class="flex items-center justify-between px-4 py-1
+              border-b border-gray-300 dark:border-gray-500 last-of-type:border-b-0"
+              >
+                <span>Editado: </span>
+                <span class="font-semibold">
+                  {format(new Date(register()!.updated), "hh:mm dd/MM/yyyy")}
+                </span>
+              </div>
+            </Show>
+
+            <div
+              class="flex items-center justify-between px-4 py-1
+            border-b border-gray-300 dark:border-gray-500 last-of-type:border-b-0"
+            >
+              <span>Categoría: </span>
+              <span class="font-semibold">
+                {register()!.expand.category.label}
               </span>
+            </div>
+
+            <div
+              class="flex items-center justify-between px-4 py-1
+            border-b border-gray-300 dark:border-gray-500 last-of-type:border-b-0"
+            >
+              <span>Descripción: </span>
+              <span class="font-semibold">{register()!.description}</span>
             </div>
           </div>
         </div>
       </Show>
+
+      <div
+        class="flex items-center justify-evenly
+          bg-gray-200 dark:bg-gray-800
+          p-4 rounded shadow"
+      >
+        <A
+          href={`/${RoutesEnum.Registers}`}
+          class="bg-gray-300 dark:bg-gray-700 px-4 py-1 rounded shadow font-medium"
+        >
+          Volver
+        </A>
+        <button
+          onclick={editRegister}
+          class="bg-primary-300 dark:bg-primary-800 px-4 py-1 rounded shadow font-medium"
+        >
+          Editar
+        </button>
+      </div>
     </div>
   );
 }

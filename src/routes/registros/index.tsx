@@ -1,3 +1,4 @@
+import { A } from "@solidjs/router";
 import { endOfMonth, format, startOfMonth } from "date-fns";
 import { RiSystemAddCircleFill } from "solid-icons/ri";
 import { For, Show, createEffect, createSignal, on } from "solid-js";
@@ -6,7 +7,6 @@ import RegisterForm from "~/components/RegisterForm";
 import { useRegisters } from "~/components/contexts/registers";
 import ListHeader from "~/components/shared/ListHeader";
 import Paginator, { PaginatorData } from "~/components/shared/Paginator";
-import { RoutesEnum } from "~/constants/routes";
 import { pb } from "~/services/pocketbase";
 
 const Registros = () => {
@@ -39,10 +39,6 @@ const Registros = () => {
       totalPages,
     });
     setRegisters(items);
-  };
-
-  const navigateToItem = (id: string) => {
-    navigate(`/${RoutesEnum.Registers}/${id}`, { replace: true });
   };
 
   const setPage = (page: number) => {
@@ -87,11 +83,11 @@ const Registros = () => {
           >
             <For each={registers()}>
               {(register) => (
-                <div
+                <A
+                  href={register.id}
                   class="flex gap-4 items-center justify-between py-2 px-4
                     bg-white dark:bg-gray-600 rounded cursor-pointer
                     shadow-sm hover:shadow transition-all duration-200"
-                  onclick={() => navigateToItem(register.id)}
                 >
                   <div class="rounded-full overflow-hidden">
                     <img
@@ -132,7 +128,7 @@ const Registros = () => {
                       </span>
                     </div>
                   </div>
-                </div>
+                </A>
               )}
             </For>
           </div>
