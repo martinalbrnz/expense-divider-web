@@ -1,17 +1,19 @@
 import { endOfMonth, format, startOfMonth } from "date-fns";
 import { RiSystemAddCircleFill } from "solid-icons/ri";
 import { For, Show, createEffect, createSignal, on } from "solid-js";
-import { Title } from "solid-start";
+import { Title, useNavigate } from "solid-start";
 import RegisterForm from "~/components/RegisterForm";
 import { useRegisters } from "~/components/contexts/registers";
 import ListHeader from "~/components/shared/ListHeader";
 import Paginator, { PaginatorData } from "~/components/shared/Paginator";
+import { RoutesEnum } from "~/constants/routes";
 import { pb } from "~/services/pocketbase";
 
 const Registros = () => {
+  const navigate = useNavigate();
   const [registers, { setRegisters }]: any = useRegisters();
 
-  const [showForm, setShowForm] = createSignal<boolean>(true);
+  const [showForm, setShowForm] = createSignal<boolean>(false);
   const [selectedDate, setSelectedDate] = createSignal(Date.now());
   const [paginatorData, setPaginatorData] = createSignal<PaginatorData>({
     page: 1,
@@ -37,6 +39,10 @@ const Registros = () => {
       totalPages,
     });
     setRegisters(items);
+  };
+
+  const navigateToItem = (id: string) => {
+    navigate(`/${RoutesEnum.Registers}/${id}`, { replace: true });
   };
 
   const setPage = (page: number) => {
@@ -69,7 +75,7 @@ const Registros = () => {
         <Show
           when={registers().length > 0}
           fallback={
-            <div class=" p-4 m-4">
+            <div class="p-4 m-4">
               <span>No hay registros</span>
             </div>
           }
@@ -81,7 +87,12 @@ const Registros = () => {
           >
             <For each={registers()}>
               {(register) => (
-                <div class="flex gap-4 items-center justify-between py-2 px-4 bg-white dark:bg-gray-600 rounded shadow-sm hover:shadow transition-all duration-200">
+                <div
+                  class="flex gap-4 items-center justify-between py-2 px-4
+                    bg-white dark:bg-gray-600 rounded cursor-pointer
+                    shadow-sm hover:shadow transition-all duration-200"
+                  onclick={() => navigateToItem(register.id)}
+                >
                   <div class="rounded-full overflow-hidden">
                     <img
                       src={pb.getFileUrl(

@@ -14,6 +14,7 @@ import { useCurrentUser } from "./contexts/user";
 import Modal from "./shared/Modal";
 
 export interface RegisterFormProps {
+  registerForEdit?: RegistersForm;
   close: () => void;
 }
 
