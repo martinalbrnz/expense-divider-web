@@ -2,15 +2,15 @@ import { A } from "@solidjs/router";
 import { endOfMonth, format, startOfMonth } from "date-fns";
 import { RiSystemAddCircleFill } from "solid-icons/ri";
 import { For, Show, createEffect, createSignal, on } from "solid-js";
-import { Title, useNavigate } from "solid-start";
+import { Title } from "solid-start";
 import RegisterForm from "~/components/RegisterForm";
 import { useRegisters } from "~/components/contexts/registers";
 import ListHeader from "~/components/shared/ListHeader";
 import Paginator, { PaginatorData } from "~/components/shared/Paginator";
+import { currency } from "~/pipes/currency";
 import { pb } from "~/services/pocketbase";
 
 const Registros = () => {
-  const navigate = useNavigate();
   const [registers, { setRegisters }]: any = useRegisters();
 
   const [showForm, setShowForm] = createSignal<boolean>(false);
@@ -121,10 +121,7 @@ const Registros = () => {
                       <span>$</span>
                       <span>
                         {register.type === "expense" && "-"}
-                        {new Intl.NumberFormat("es", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        }).format(register.amount)}
+                        {currency(register.amount)}
                       </span>
                     </div>
                   </div>
