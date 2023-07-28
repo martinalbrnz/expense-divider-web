@@ -1,7 +1,8 @@
 export enum RoutesEnum {
 
+	Configuration = 'config',
 	Home = 'home',
 	Login = 'login',
 	Registers = 'registros',
-	Configuration = 'config',
+	Statistics = 'estadisticas',
 }

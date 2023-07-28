@@ -1,6 +1,7 @@
 import {
   RiBuildingsHome4Line,
   RiBusinessLineChartLine,
+  RiFinanceCoinsLine,
   RiSystemLoginBoxLine,
 } from "solid-icons/ri";
 import { NavItemI } from "~/models/navItem.model";
@@ -27,6 +28,12 @@ export const navRoutes: NavItemI[] = [
   {
     path: RoutesEnum.Registers,
     label: "Registros",
+    icon: RiFinanceCoinsLine,
+    role: ["user"],
+  },
+  {
+    path: RoutesEnum.Statistics,
+    label: "Estadísticas",
     icon: RiBusinessLineChartLine,
     role: ["user"],
   },

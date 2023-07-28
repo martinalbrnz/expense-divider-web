@@ -2,26 +2,8 @@ import { format } from "date-fns";
 import { Show, createSignal, onMount } from "solid-js";
 import { A, useParams } from "solid-start";
 import { RoutesEnum } from "~/constants/routes";
-import { UserRecord } from "~/models/authUser.model";
-import { CategoryRecord } from "~/models/category.model";
-import { RegisterType } from "~/models/register.model";
+import { RegisterRecord } from "~/models/register.model";
 import { pb } from "~/services/pocketbase";
-
-export interface RegisterRecord {
-  amount: number;
-  category: string;
-  collectionId: string;
-  collectionName: string;
-  created: Date;
-  date: Date;
-  description: string;
-  expand: { user_id: UserRecord; category: CategoryRecord };
-  id: string;
-  receipt_url?: string;
-  type: RegisterType;
-  updated: Date;
-  user_id: string;
-}
 
 export default function ItemRegistro() {
   const params = useParams();
