@@ -23,11 +23,14 @@ export interface RelevantValues {
   total: number;
 }
 
+export type DivisionType = "equal" | "proportion";
+
 export default function Estadisticas() {
   const [registers, setRegisters] = createSignal<RegisterRecord[]>([]);
   const [users, setUsers] = createSignal<UserRecord[]>([]);
   const [categories, setCategories] = createSignal<CategoryRecord[]>([]);
   const [selectedDate, setSelectedDate] = createSignal(Date.now());
+  const [divisionType, setDivisionType] = createSignal<DivisionType>("equal");
 
   const monthValues = () =>
     registers().reduce(
@@ -65,8 +68,7 @@ export default function Estadisticas() {
   const categoriesId = () => categories().map((i) => i.id);
 
   const classifiedDataObject = createMemo(() => {
-    if (!users().length || !categories().length) return;
-    console.count();
+    if (!users().length || !categories().length) return {};
     const initialValues = [...usersId(), ...categoriesId()]
       .map((item) => {
         return {
@@ -139,12 +141,23 @@ export default function Estadisticas() {
     setCategories(records);
   };
 
+  // TODO: Get this done
+  const expenseDivider = createMemo(() => {
+    if (
+      !usersId().length ||
+      !Object.keys(classifiedDataObject()).length ||
+      !monthValues()
+    )
+      return {};
+  });
+
   createEffect(on(selectedDate, fetchRecords));
 
   onMount(() => {
     fetchUsers();
     fetchCategories();
   });
+
   return (
     <>
       <Title>
@@ -158,34 +171,29 @@ export default function Estadisticas() {
         />
 
         <div
-          class="flex flex-col gap-2
+          class="flex flex-col font-medium text-end
 					bg-gray-200 dark:bg-gray-800
-					p-4 rounded shadow"
+					p-4 rounded shadow text-sm sm:text-base"
         >
-          <h1 class="text-green-600 font-bold text-4xl">
-            Ingresos: ${currency(monthValues().income)}
-          </h1>
-          <h1 class="text-red-600 font-bold text-4xl">
-            Egresos: ${currency(monthValues().outcome)}
-          </h1>
-          <h1 class="text-white font-bold text-4xl">
-            TOTAL: ${currency(monthValues().total)}
-          </h1>
-        </div>
+          <div
+            class="grid grid-cols-4 py-2 text-end
+            border-b-2 border-gray-300 dark:border-gray-500"
+          >
+            <h1 class="text-start">Detalle</h1>
+            <h1>Ingresos</h1>
+            <h1>Egresos</h1>
+            <h1>Balance</h1>
+          </div>
 
-        <div
-          class="flex flex-col gap-2
-					bg-gray-200 dark:bg-gray-800
-					p-4 rounded shadow"
-        >
           <For each={users()}>
             {(user) => (
-              <div class="flex justify-between">
-                <span>{user.name}</span>
+              <div
+                class="grid grid-cols-4 py-2
+                  border-b border-gray-300 dark:border-gray-500"
+              >
+                <span class="text-start">{user.name}</span>
                 <Show
-                  when={Object.keys(classifiedDataObject() ?? {}).includes(
-                    user.id
-                  )}
+                  when={Object.keys(classifiedDataObject()).includes(user.id)}
                 >
                   <span>
                     {currency(classifiedDataObject()[user.id].income)}
@@ -209,10 +217,13 @@ export default function Estadisticas() {
 
           <For each={categories()}>
             {(category) => (
-              <div class="flex justify-between">
-                <span>{category.label}</span>
+              <div
+                class="grid grid-cols-4 py-2
+                border-b border-gray-300 dark:border-gray-500"
+              >
+                <span class="text-start">{category.label}</span>
                 <Show
-                  when={Object.keys(classifiedDataObject() ?? {}).includes(
+                  when={Object.keys(classifiedDataObject()).includes(
                     category.id
                   )}
                 >
@@ -236,7 +247,33 @@ export default function Estadisticas() {
               </div>
             )}
           </For>
+
+          <div class="grid grid-cols-4 py-2 text-end text-sm sm:text-xl">
+            <h1 class="text-start">TOTAL</h1>
+            <h1 class="text-green-600">${currency(monthValues().income)}</h1>
+            <h1 class="text-red-600">${currency(monthValues().outcome)}</h1>
+            <h1 class="text-white">${currency(monthValues().total)}</h1>
+          </div>
         </div>
+
+        {/* <div
+          class="flex flex-col font-medium
+					bg-gray-200 dark:bg-gray-800
+					p-4 rounded shadow"
+        >
+          <For each={users()}>
+            {(user) => (
+              <Show
+                when={Object.keys(expenseDivider() ?? {}).includes(user.id)}
+              >
+                <div>
+                  <span>{user.name}</span>
+                  <span>{user.username}</span>
+                </div>
+              </Show>
+            )}
+          </For>
+        </div> */}
       </div>
     </>
   );
