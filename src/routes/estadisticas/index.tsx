@@ -1,5 +1,6 @@
 import { endOfMonth, format, startOfMonth } from "date-fns";
 import es from "date-fns/locale/es";
+import { RiUserFacesUser3Line } from "solid-icons/ri";
 import {
   For,
   Show,
@@ -30,7 +31,8 @@ export default function Estadisticas() {
   const [users, setUsers] = createSignal<UserRecord[]>([]);
   const [categories, setCategories] = createSignal<CategoryRecord[]>([]);
   const [selectedDate, setSelectedDate] = createSignal(Date.now());
-  const [divisionType, setDivisionType] = createSignal<DivisionType>("equal");
+  const [divisionType, setDivisionType] =
+    createSignal<DivisionType>("proportion");
 
   const monthValues = () =>
     registers().reduce(
@@ -141,14 +143,40 @@ export default function Estadisticas() {
     setCategories(records);
   };
 
-  // TODO: Get this done
-  const expenseDivider = createMemo(() => {
+  const expenseDivider: any = createMemo(() => {
     if (
       !usersId().length ||
       !Object.keys(classifiedDataObject()).length ||
       !monthValues()
-    )
+    ) {
       return {};
+    }
+
+    const balance = {};
+
+    if (divisionType() === "equal") {
+      const expectedOutcome = monthValues().outcome / users().length;
+
+      users().map((user) => {
+        Object.assign(balance, {
+          [user.id]: classifiedDataObject()[user.id].outcome - expectedOutcome,
+        });
+      });
+    }
+
+    if (divisionType() === "proportion") {
+      users().map((user) => {
+        const expectedOutcome =
+          (classifiedDataObject()[user.id].income / monthValues().income) *
+          monthValues().outcome;
+
+        Object.assign(balance, {
+          [user.id]: classifiedDataObject()[user.id].outcome - expectedOutcome,
+        });
+      });
+    }
+
+    return balance;
   });
 
   createEffect(on(selectedDate, fetchRecords));
@@ -179,17 +207,18 @@ export default function Estadisticas() {
             class="grid grid-cols-4 py-2 text-end
             border-b-2 border-gray-300 dark:border-gray-500"
           >
-            <h1 class="text-start">Detalle</h1>
+            <h1 class="text-start">Usuario</h1>
             <h1>Ingresos</h1>
             <h1>Egresos</h1>
             <h1>Balance</h1>
           </div>
 
           <For each={users()}>
-            {(user) => (
+            {(user, i) => (
               <div
-                class="grid grid-cols-4 py-2
+                class="grid grid-cols-4 py-2 md:ps-2
                   border-b border-gray-300 dark:border-gray-500"
+                classList={{ "border-b-0": i() + 1 === users().length }}
               >
                 <span class="text-start">{user.name}</span>
                 <Show
@@ -215,10 +244,20 @@ export default function Estadisticas() {
             )}
           </For>
 
+          <div
+            class="grid grid-cols-4 py-2 text-end mt-6
+            border-b-2 border-gray-300 dark:border-gray-500"
+          >
+            <h1 class="text-start">Detalle</h1>
+            <h1>Ingresos</h1>
+            <h1>Egresos</h1>
+            <h1>Balance</h1>
+          </div>
+
           <For each={categories()}>
             {(category) => (
               <div
-                class="grid grid-cols-4 py-2
+                class="grid grid-cols-4 py-2 md:ps-2
                 border-b border-gray-300 dark:border-gray-500"
               >
                 <span class="text-start">{category.label}</span>
@@ -252,28 +291,91 @@ export default function Estadisticas() {
             <h1 class="text-start">TOTAL</h1>
             <h1 class="text-green-600">${currency(monthValues().income)}</h1>
             <h1 class="text-red-600">${currency(monthValues().outcome)}</h1>
-            <h1 class="text-white">${currency(monthValues().total)}</h1>
+            <h1>${currency(monthValues().total)}</h1>
           </div>
         </div>
 
-        {/* <div
+        <div
           class="flex flex-col font-medium
 					bg-gray-200 dark:bg-gray-800
 					p-4 rounded shadow"
         >
-          <For each={users()}>
-            {(user) => (
-              <Show
-                when={Object.keys(expenseDivider() ?? {}).includes(user.id)}
+          <div class="flex items-center justify-between">
+            <h2>Balances del mes</h2>
+
+            <div class="flex items-center justify-end gap-2">
+              <button
+                onclick={() => setDivisionType("equal")}
+                class="px-2 py-1 rounded"
+                classList={{
+                  "bg-primary-600 dark:bg-primary-800 text-gray-100 shadow":
+                    divisionType() === "equal",
+                  "text-gray-400 dark:text-gray-600":
+                    divisionType() !== "equal",
+                }}
               >
-                <div>
-                  <span>{user.name}</span>
-                  <span>{user.username}</span>
-                </div>
-              </Show>
-            )}
-          </For>
-        </div> */}
+                Equitativo
+              </button>
+              <button
+                onclick={() => setDivisionType("proportion")}
+                class="px-2 py-1 rounded"
+                classList={{
+                  "bg-primary-600 dark:bg-primary-800 text-gray-100 shadow":
+                    divisionType() === "proportion",
+                  "text-gray-400 dark:text-gray-600":
+                    divisionType() !== "proportion",
+                }}
+              >
+                Proporcional
+              </button>
+            </div>
+          </div>
+
+          <div class="px-4">
+            <For each={users()}>
+              {(user) => (
+                <Show
+                  when={Object.keys(expenseDivider() ?? {}).includes(user.id)}
+                >
+                  <div
+                    class="flex items-center justify-between gap-4 py-2 px-8
+                  border-b border-gray-300 dark:border-gray-500 last-of-type:border-b-0"
+                  >
+                    <div class="flex items-center justify-start gap-4">
+                      <div class="rounded-full overflow-hidden h-12 w-12">
+                        <Show
+                          when={user && user?.avatar}
+                          fallback={
+                            <RiUserFacesUser3Line class="text-4xl text-gray-400" />
+                          }
+                        >
+                          <img
+                            src={pb.getFileUrl(user, user.avatar!, {
+                              thumb: "100x100",
+                            })}
+                            alt={user.name}
+                            width={50}
+                            height={50}
+                          />
+                        </Show>
+                      </div>
+                      <span>{user.name}</span>
+                    </div>
+                    <span
+                      classList={{
+                        "text-green-600": expenseDivider()[user.id] > 0,
+                        "text-red-500": expenseDivider()[user.id] < 0,
+                        "text-gray-500": expenseDivider()[user.id] === 0,
+                      }}
+                    >
+                      {currency(expenseDivider()[user.id])}
+                    </span>
+                  </div>
+                </Show>
+              )}
+            </For>
+          </div>
+        </div>
       </div>
     </>
   );
