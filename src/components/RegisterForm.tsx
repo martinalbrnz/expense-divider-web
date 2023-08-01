@@ -5,16 +5,21 @@ import {
   required,
   reset,
 } from "@modular-forms/solid";
+import { startOfDay } from "date-fns";
 import { RiSystemCloseCircleFill } from "solid-icons/ri";
 import { For, createSignal, onMount } from "solid-js";
-import { RegisterCategory, RegisterType } from "~/models/register.model";
+import {
+  RegisterCategory,
+  RegisterRecord,
+  RegisterType,
+} from "~/models/register.model";
 import { User } from "~/models/user.model";
 import { pb } from "~/services/pocketbase";
 import { useCurrentUser } from "./contexts/user";
 import Modal from "./shared/Modal";
 
 export interface RegisterFormProps {
-  registerForEdit?: RegistersForm;
+  registerForEdit?: RegisterRecord;
   close: () => void;
 }
 
@@ -56,23 +61,44 @@ export default function RegisterForm(props: RegisterFormProps) {
   };
 
   onMount(() => {
-    reset(registersForm, ["user_id", "date"], {
-      initialValues: {
-        user_id: currentUser()!.id,
-        date: new Date().toISOString().split("T")[0],
-      },
-    });
+    if (props.registerForEdit) {
+      const { amount, category, date, description, type, user_id } =
+        props.registerForEdit;
+      const MS_IN_MINUTE = 1000 * 60;
+      const offset = new Date(props.registerForEdit.date).getTimezoneOffset();
+      const correction = offset >= 0 ? (offset + 1) * MS_IN_MINUTE : 0;
+
+      reset(
+        registersForm,
+        ["amount", "category", "date", "description", "type", "user_id"],
+        {
+          initialValues: {
+            amount,
+            category,
+            description,
+            type,
+            user_id,
+            date: startOfDay(new Date(date).getTime() + correction)
+              .toISOString()
+              .split("T")[0],
+          },
+        }
+      );
+    } else {
+      reset(registersForm, ["user_id", "date"], {
+        initialValues: {
+          user_id: currentUser()!.id,
+          date: startOfDay(new Date()).toISOString().split("T")[0],
+        },
+      });
+    }
     fetchRegisterCategory();
     fetchUsers();
   });
 
-  const submitRegister: SubmitHandler<RegistersForm> = async (
-    values,
-    event
-  ) => {
-    console.log(values);
-    // const record = await pb.collection("registers").create(values);
-    // if (record.id) props.close();
+  const submitRegister: SubmitHandler<RegistersForm> = async (values) => {
+    const record = await pb.collection("registers").create(values);
+    if (record.id) props.close();
   };
 
   return (
@@ -87,7 +113,9 @@ export default function RegisterForm(props: RegisterFormProps) {
             onclick={props.close}
           />
 
-          <h2 class="font-semibold text-2xl">Crear nuevo registro</h2>
+          <h2 class="font-semibold text-2xl">
+            {props.registerForEdit ? "Editar" : "Crear nuevo"} registro
+          </h2>
 
           <Form onSubmit={submitRegister}>
             <Field name="date" validate={[required("Este campo es requerido")]}>
@@ -126,6 +154,7 @@ export default function RegisterForm(props: RegisterFormProps) {
                   <input
                     {...props}
                     name="description"
+                    value={field.value}
                     placeholder="Breve descripción del registro"
                     class="px-2 py-1 border dark:border-gray-900 rounded outline-none shadow bg-gray-100 dark:bg-gray-700 focus:border-primary-600"
                     classList={{
@@ -153,6 +182,7 @@ export default function RegisterForm(props: RegisterFormProps) {
                     {...props}
                     name="amount"
                     type="number"
+                    value={field.value}
                     placeholder="Monto del registro"
                     class="px-2 py-1 border dark:border-gray-900 rounded outline-none shadow bg-gray-100 dark:bg-gray-700 focus:border-primary-600"
                     classList={{
@@ -180,6 +210,7 @@ export default function RegisterForm(props: RegisterFormProps) {
                   <select
                     {...props}
                     name="category"
+                    value={field.value}
                     class="px-2 py-1 border dark:border-gray-900 rounded outline-none shadow bg-gray-100 dark:bg-gray-700 focus:border-primary-600"
                     classList={{
                       "border-red-600": !!field.error,
@@ -208,6 +239,7 @@ export default function RegisterForm(props: RegisterFormProps) {
                   <select
                     {...props}
                     name="type"
+                    value={field.value}
                     class="px-2 py-1 border dark:border-gray-900 rounded outline-none shadow bg-gray-100 dark:bg-gray-700 focus:border-primary-600"
                     classList={{
                       "border-red-600 text-red-600": !!field.error,
@@ -229,6 +261,7 @@ export default function RegisterForm(props: RegisterFormProps) {
                   <label class="font-medium">Usuario</label>
                   <select
                     {...props}
+                    value={field.value}
                     class="px-2 py-1 border dark:border-gray-900 rounded outline-none shadow bg-gray-100 dark:bg-gray-700 focus:border-primary-600"
                     classList={{
                       "border-red-600 text-red-600": !!field.error,
@@ -238,7 +271,7 @@ export default function RegisterForm(props: RegisterFormProps) {
                       {(user) => (
                         <option
                           value={user.id.toString()}
-                          selected={user.id.toString() === currentUser().id}
+                          selected={user.id.toString() === field.value}
                         >
                           {user.name.toString()}
                         </option>

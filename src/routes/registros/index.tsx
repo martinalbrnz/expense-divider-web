@@ -104,7 +104,13 @@ const Registros = () => {
                   <div class="flex flex-1 flex-col sm:flex-row items-center justify-between">
                     <div class="flex flex-col gap-1 align-start justify-start sm:justify-center w-full">
                       <span class="text-sm">
-                        {new Date(register.date).toLocaleString().split(",")[0]}
+                        {format(
+                          new Date(register.date).getTime() +
+                            (new Date(register.date).getTimezoneOffset() + 1) *
+                              1000 *
+                              60,
+                          "dd/MM/yyyy"
+                        )}
                       </span>
                       <span>
                         ({register.expand.category.label}){" "}
