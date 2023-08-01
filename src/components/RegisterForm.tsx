@@ -20,7 +20,7 @@ import Modal from "./shared/Modal";
 
 export interface RegisterFormProps {
   registerForEdit?: RegisterRecord;
-  close: () => void;
+  close: (b?: boolean) => void;
 }
 
 type RegistersForm = {
@@ -97,8 +97,15 @@ export default function RegisterForm(props: RegisterFormProps) {
   });
 
   const submitRegister: SubmitHandler<RegistersForm> = async (values) => {
-    const record = await pb.collection("registers").create(values);
-    if (record.id) props.close();
+    if (props.registerForEdit) {
+      const record = await pb
+        .collection("registers")
+        .update(props.registerForEdit.id, values);
+      if (record.id) props.close(true);
+    } else {
+      const record = await pb.collection("registers").create(values);
+      if (record.id) props.close(true);
+    }
   };
 
   return (
@@ -110,7 +117,7 @@ export default function RegisterForm(props: RegisterFormProps) {
         >
           <RiSystemCloseCircleFill
             class="absolute text-2xl top-2 right-2 transition-colors duration-100 hover:text-red-600 cursor-pointer"
-            onclick={props.close}
+            onclick={() => props.close()}
           />
 
           <h2 class="font-semibold text-2xl">
@@ -309,7 +316,7 @@ export default function RegisterForm(props: RegisterFormProps) {
               type="submit"
               class="w-full py-1 px-2 mt-4 bg-green-600 text-gray-100 text-center font-medium rounded"
             >
-              Agregar registro
+              {props.registerForEdit ? "Editar" : "Crear"} registro
             </button>
           </Form>
         </div>

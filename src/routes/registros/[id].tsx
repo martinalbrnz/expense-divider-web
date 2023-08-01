@@ -30,7 +30,15 @@ export default function ItemRegistro() {
     await pb.collection("registers").delete(params.id);
   };
 
+  const closeModal = (refresh?: boolean) => {
+    if (refresh) {
+      fetchItem();
+    }
+    setOpenModal(false);
+  };
+
   onMount(() => fetchItem());
+
   return (
     <>
       <div class="flex flex-col gap-4 m-4 text-gray-800 dark:text-gray-300">
@@ -169,10 +177,7 @@ export default function ItemRegistro() {
       </div>
 
       <Show when={openModal()}>
-        <RegisterForm
-          close={() => setOpenModal(false)}
-          registerForEdit={register()!}
-        />
+        <RegisterForm close={closeModal} registerForEdit={register()!} />
       </Show>
     </>
   );
