@@ -23,6 +23,10 @@ export default function ItemRegistro() {
     alert("¡Oopsie! ¡Aún no está implementado! 🙀");
   };
 
+  const deleteRegister = async () => {
+    await pb.collection("registers").delete(params.id);
+  };
+
   onMount(() => fetchItem());
   return (
     <div class="flex flex-col gap-4 m-4 text-gray-800 dark:text-gray-300">
@@ -139,12 +143,21 @@ export default function ItemRegistro() {
         >
           Volver
         </A>
-        <button
-          onclick={editRegister}
-          class="bg-primary-300 dark:bg-primary-800 px-4 py-1 rounded shadow font-medium"
-        >
-          Editar
-        </button>
+        <div class="flex gap-2">
+          <button
+            onclick={deleteRegister}
+            class="bg-red-600 px-4 py-1 rounded shadow font-medium w-24"
+          >
+            Eliminar
+          </button>
+
+          <button
+            onclick={editRegister}
+            class="bg-primary-300 dark:bg-primary-800 px-4 py-1 rounded shadow font-medium w-24"
+          >
+            Editar
+          </button>
+        </div>
       </div>
     </div>
   );
