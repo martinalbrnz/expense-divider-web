@@ -16,7 +16,7 @@ import "./root.css";
 
 export default function Root() {
   return (
-    <Html lang="en">
+    <Html lang="es">
       <Head>
         <Title>Divisor de expensas</Title>
         <Meta charset="utf-8" />

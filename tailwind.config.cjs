@@ -6,7 +6,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: colors.sky,
+        primary: colors.indigo,
         secondary: colors.zinc,
       },
       backgroundImage: {

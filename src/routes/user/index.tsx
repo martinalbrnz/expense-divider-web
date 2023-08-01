@@ -3,6 +3,7 @@ import { RiUserFacesUser3Line } from "solid-icons/ri";
 import { Show } from "solid-js";
 import { Title, useNavigate } from "solid-start";
 import { useCurrentUser } from "~/components/contexts/user";
+import { RoutesEnum } from "~/constants/routes";
 import { pb } from "~/services/pocketbase";
 
 const User = () => {
@@ -12,6 +13,11 @@ const User = () => {
   if (!user()) {
     navigate("/", { replace: true });
   }
+
+  const userLogout = () => {
+    logout();
+    navigate(`/${RoutesEnum.Login}`, { replace: true });
+  };
 
   return (
     <>
@@ -59,7 +65,7 @@ const User = () => {
           </button>
 
           <button
-            onClick={logout}
+            onClick={userLogout}
             class="bg-red-600 text-gray-100 rounded px-2 py-1 font-medium"
           >
             Cerrar sesión
