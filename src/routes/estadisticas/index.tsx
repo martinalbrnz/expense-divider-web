@@ -135,6 +135,7 @@ export default function Estadisticas() {
 
     setUsers(records);
   };
+
   const fetchCategories = async () => {
     const records: CategoryRecord[] = await pb
       .collection("register_category")
@@ -171,7 +172,8 @@ export default function Estadisticas() {
           monthValues().outcome;
 
         Object.assign(balance, {
-          [user.id]: classifiedDataObject()[user.id].outcome - expectedOutcome,
+          [user.id]:
+            classifiedDataObject()[user.id].outcome - expectedOutcome || 0,
         });
       });
     }
@@ -196,7 +198,32 @@ export default function Estadisticas() {
         <ListHeader
           selectedDate={selectedDate()}
           setSelectedDate={(date: number) => setSelectedDate(date)}
-        />
+        >
+          <div class="flex items-center justify-end gap-2">
+            <button
+              onclick={() => setDivisionType("equal")}
+              class="px-2 py-1 rounded"
+              classList={{
+                "bg-green-600 text-gray-100 shadow": divisionType() === "equal",
+                "text-gray-400 dark:text-gray-600": divisionType() !== "equal",
+              }}
+            >
+              Equitativo
+            </button>
+            <button
+              onclick={() => setDivisionType("proportion")}
+              class="px-2 py-1 rounded"
+              classList={{
+                "bg-green-600 text-gray-100 shadow":
+                  divisionType() === "proportion",
+                "text-gray-400 dark:text-gray-600":
+                  divisionType() !== "proportion",
+              }}
+            >
+              Proporcional
+            </button>
+          </div>
+        </ListHeader>
 
         <div
           class="flex flex-col font-medium text-end
@@ -204,7 +231,7 @@ export default function Estadisticas() {
 					p-4 rounded shadow text-sm sm:text-base"
         >
           <div
-            class="grid grid-cols-4 py-2 text-end
+            class="grid grid-cols-4 py-1 text-end
             border-b-2 border-gray-300 dark:border-gray-500"
           >
             <h1 class="text-start">Usuario</h1>
@@ -216,7 +243,7 @@ export default function Estadisticas() {
           <For each={users()}>
             {(user, i) => (
               <div
-                class="grid grid-cols-4 py-2 md:ps-2
+                class="grid grid-cols-4 py-1 md:ps-2
                   border-b border-gray-300 dark:border-gray-500"
                 classList={{ "border-b-0": i() + 1 === users().length }}
               >
@@ -245,7 +272,7 @@ export default function Estadisticas() {
           </For>
 
           <div
-            class="grid grid-cols-4 py-2 text-end mt-6
+            class="grid grid-cols-4 py-1 text-end mt-6
             border-b-2 border-gray-300 dark:border-gray-500"
           >
             <h1 class="text-start">Detalle</h1>
@@ -257,7 +284,7 @@ export default function Estadisticas() {
           <For each={categories()}>
             {(category) => (
               <div
-                class="grid grid-cols-4 py-2 md:ps-2
+                class="grid grid-cols-4 py-1 md:ps-2
                 border-b border-gray-300 dark:border-gray-500"
               >
                 <span class="text-start">{category.label}</span>
@@ -300,35 +327,8 @@ export default function Estadisticas() {
 					bg-gray-200 dark:bg-gray-800
 					p-4 rounded shadow"
         >
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-start">
             <h2>Balances del mes</h2>
-
-            <div class="flex items-center justify-end gap-2">
-              <button
-                onclick={() => setDivisionType("equal")}
-                class="px-2 py-1 rounded"
-                classList={{
-                  "bg-primary-600 dark:bg-primary-800 text-gray-100 shadow":
-                    divisionType() === "equal",
-                  "text-gray-400 dark:text-gray-600":
-                    divisionType() !== "equal",
-                }}
-              >
-                Equitativo
-              </button>
-              <button
-                onclick={() => setDivisionType("proportion")}
-                class="px-2 py-1 rounded"
-                classList={{
-                  "bg-primary-600 dark:bg-primary-800 text-gray-100 shadow":
-                    divisionType() === "proportion",
-                  "text-gray-400 dark:text-gray-600":
-                    divisionType() !== "proportion",
-                }}
-              >
-                Proporcional
-              </button>
-            </div>
           </div>
 
           <div class="px-4">

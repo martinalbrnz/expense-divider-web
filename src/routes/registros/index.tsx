@@ -1,6 +1,5 @@
 import { A } from "@solidjs/router";
 import { endOfMonth, format, startOfMonth } from "date-fns";
-import { RiSystemAddCircleFill } from "solid-icons/ri";
 import { For, Show, createEffect, createSignal, on } from "solid-js";
 import { Title } from "solid-start";
 import RegisterForm from "~/components/RegisterForm";
@@ -67,7 +66,17 @@ const Registros = () => {
         <ListHeader
           selectedDate={selectedDate()}
           setSelectedDate={(date: number) => setSelectedDate(date)}
-        />
+        >
+          <>
+            <button
+              onclick={() => setShowForm(true)}
+              class="px-2 py-1 rounded bg-green-600
+                text-gray-100 shadow"
+            >
+              Agregar registro
+            </button>
+          </>
+        </ListHeader>
         <Show
           when={registers().length > 0}
           fallback={
@@ -146,19 +155,10 @@ const Registros = () => {
             setPerPage={setPerPage}
           />
         </Show>
-
-        <div
-          class="absolute right-6 bottom-[34px]
-            flex items-center justify-center text-4xl
-            rounded-full w-12 h-12 shadow-lg
-            bg-green-600 text-gray-200 cursor-pointer"
-        >
-          <Show when={showForm()}>
-            <RegisterForm close={() => setShowForm(false)} />
-          </Show>
-          <RiSystemAddCircleFill onclick={() => setShowForm((show) => !show)} />
-        </div>
       </div>
+      <Show when={showForm()}>
+        <RegisterForm close={() => setShowForm(false)} />
+      </Show>
     </>
   );
 };

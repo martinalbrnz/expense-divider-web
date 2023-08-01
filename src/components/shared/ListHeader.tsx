@@ -5,7 +5,7 @@ import {
   RiDesignGridFill,
   RiEditorListCheck,
 } from "solid-icons/ri";
-import { Show } from "solid-js";
+import { JSX, Show } from "solid-js";
 
 export interface HeaderProps {
   selectedDate?: number;
@@ -14,6 +14,7 @@ export interface HeaderProps {
   setTakeItems?: (n: number) => void;
   gridView?: boolean;
   setGridView?: (b: boolean) => void;
+  children?: JSX.Element;
 }
 
 const ListHeader = (props: HeaderProps) => {
@@ -56,7 +57,7 @@ const ListHeader = (props: HeaderProps) => {
         p-4 rounded shadow"
       >
         <Show when={props.selectedDate}>
-          <div class="flex flex-1 items-center justify-center gap-3">
+          <div class="flex items-center justify-center gap-3">
             <RiArrowsArrowLeftCircleLine
               onclick={previousMonth}
               class="cursor-pointer text-2xl rounded-full"
@@ -111,6 +112,8 @@ const ListHeader = (props: HeaderProps) => {
             </div>
           </div>
         </Show>
+
+        <Show when={props.children}>{props.children}</Show>
       </div>
     </>
   );
