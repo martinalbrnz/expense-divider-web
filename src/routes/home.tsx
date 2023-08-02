@@ -30,7 +30,7 @@ const Home = () => {
       <div class="flex flex-col gap-4 m-4 text-gray-800 dark:text-gray-300">
         <div
           class="flex items-center justify-between gap-2
-            bg-gray-200 dark:bg-gray-800
+            bg-primary-300 dark:bg-primary-950
             p-4 rounded shadow"
         >
           <h2 class="font-medium">Hola, {user()?.name}!</h2>
@@ -42,7 +42,7 @@ const Home = () => {
 
         <div
           class="flex flex-col gap-2
-            bg-gray-200 dark:bg-gray-800
+            bg-primary-300 dark:bg-primary-950
             p-4 rounded shadow"
         >
           <h2 class="font-medium">Últimos 5 registros</h2>
@@ -102,7 +102,7 @@ const Home = () => {
 
         <div
           class="flex flex-col gap-2
-            bg-gray-200 dark:bg-gray-800
+            bg-primary-300 dark:bg-primary-950
             p-4 rounded shadow"
         >
           <h2 class="font-medium">¿Cómo funciona el divisor?</h2>

@@ -15,6 +15,7 @@ import {
 } from "~/models/register.model";
 import { User } from "~/models/user.model";
 import { pb } from "~/services/pocketbase";
+import { useTheme } from "./contexts/theme";
 import { useCurrentUser } from "./contexts/user";
 import Modal from "./shared/Modal";
 
@@ -34,6 +35,7 @@ type RegistersForm = {
 };
 
 export default function RegisterForm(props: RegisterFormProps) {
+  const [isDark]: any = useTheme();
   const [currentUser]: any = useCurrentUser();
   const [registersForm, { Form, Field }] = createForm<RegistersForm>({});
 
@@ -112,8 +114,9 @@ export default function RegisterForm(props: RegisterFormProps) {
     <>
       <Modal>
         <div
+          classList={{ "dark bg-primary-950": isDark }}
           class="relative w-96 flex flex-col gap-4 p-4 shadow rounded
-            bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-300"
+            bg-gray-300 text-gray-800 dark:text-gray-300"
         >
           <RiSystemCloseCircleFill
             class="absolute text-2xl top-2 right-2 transition-colors duration-100 hover:text-red-600 cursor-pointer"

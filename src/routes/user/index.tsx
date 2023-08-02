@@ -27,7 +27,7 @@ const User = () => {
         <Show when={user()} fallback={<div>Cargando...</div>}>
           <div
             class="flex flex-col sm:flex-row gap-4 items-center 
-            bg-gray-200 dark:bg-gray-800 p-4 rounded shadow"
+            bg-primary-300 dark:bg-primary-950 p-4 rounded shadow"
           >
             <div class="flex items-center justify-center border-4 border-opacity-60 border-secondary-600 rounded max-w-xs aspect-square">
               <Show
@@ -55,7 +55,7 @@ const User = () => {
 
         <div
           class="flex gap-4 items-center justify-end
-            bg-gray-200 dark:bg-gray-800 p-4 rounded shadow"
+            bg-primary-300 dark:bg-primary-950 p-4 rounded shadow"
         >
           <button
             class="bg-gray-600 text-gray-100 rounded px-2 py-1 font-medium"

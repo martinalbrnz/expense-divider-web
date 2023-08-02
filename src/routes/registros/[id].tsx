@@ -52,7 +52,7 @@ export default function ItemRegistro() {
         >
           <div
             class="flex flex-col gap-8
-				bg-gray-200 dark:bg-gray-800
+				bg-primary-300 dark:bg-primary-950
 				p-4 rounded shadow"
           >
             <div class="flex gap-2 items-center justify-between px-8">
@@ -149,12 +149,12 @@ export default function ItemRegistro() {
 
         <div
           class="flex items-center justify-evenly
-          bg-gray-200 dark:bg-gray-800
+          bg-primary-300 dark:bg-primary-950 text-gray-300
           p-4 rounded shadow"
         >
           <A
             href={`/${RoutesEnum.Registers}`}
-            class="bg-gray-300 dark:bg-gray-700 px-4 py-1 rounded shadow font-medium"
+            class="bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-300 px-4 py-1 rounded shadow font-medium"
           >
             Volver
           </A>
@@ -168,7 +168,7 @@ export default function ItemRegistro() {
 
             <button
               onclick={editRegister}
-              class="bg-primary-300 dark:bg-primary-800 px-4 py-1 rounded shadow font-medium w-24"
+              class="bg-primary-500 dark:bg-primary-800 px-4 py-1 rounded shadow font-medium w-24"
             >
               Editar
             </button>

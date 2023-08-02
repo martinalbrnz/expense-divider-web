@@ -87,7 +87,7 @@ const Registros = () => {
         >
           <div
             class="flex flex-col gap-2
-              bg-gray-200 dark:bg-gray-800
+              bg-primary-300 dark:bg-primary-950
               p-4 rounded shadow"
           >
             <For each={registers()}>

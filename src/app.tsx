@@ -1,13 +1,13 @@
 import { FileRoutes, Routes } from "solid-start";
 import { useTheme } from "./components/contexts/theme";
-import Header from "./components/layout/header";
+import Header from "./components/layout/Header";
 import Nav from "./components/layout/nav";
 
 const App = () => {
   const [isDark]: any = useTheme();
   return (
     <div
-      class="flex h-[100svh] md:h-screen w-screen"
+      class="flex h-[100svh] md:h-screen w-screen transition-colors duration-10000"
       classList={{ dark: isDark() }}
     >
       <Nav />

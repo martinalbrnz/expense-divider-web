@@ -202,9 +202,10 @@ export default function Estadisticas() {
           <div class="flex items-center justify-end gap-2">
             <button
               onclick={() => setDivisionType("equal")}
-              class="px-2 py-1 rounded"
+              class="px-2 py-1 rounded transition-colors duration-200 w-28"
               classList={{
-                "bg-green-600 text-gray-100 shadow": divisionType() === "equal",
+                "bg-green-600 text-gray-100 shadow font-medium":
+                  divisionType() === "equal",
                 "text-gray-400 dark:text-gray-600": divisionType() !== "equal",
               }}
             >
@@ -212,9 +213,9 @@ export default function Estadisticas() {
             </button>
             <button
               onclick={() => setDivisionType("proportion")}
-              class="px-2 py-1 rounded"
+              class="px-2 py-1 rounded transition-colors duration-200 w-28"
               classList={{
-                "bg-green-600 text-gray-100 shadow":
+                "bg-green-600 text-gray-100 shadow font-medium":
                   divisionType() === "proportion",
                 "text-gray-400 dark:text-gray-600":
                   divisionType() !== "proportion",
@@ -227,7 +228,7 @@ export default function Estadisticas() {
 
         <div
           class="flex flex-col font-medium text-end
-					bg-gray-200 dark:bg-gray-800
+					bg-primary-300 dark:bg-primary-950
 					p-4 rounded shadow text-sm sm:text-base"
         >
           <div
@@ -324,7 +325,7 @@ export default function Estadisticas() {
 
         <div
           class="flex flex-col font-medium
-					bg-gray-200 dark:bg-gray-800
+					bg-primary-300 dark:bg-primary-950
 					p-4 rounded shadow"
         >
           <div class="flex items-center justify-start">

@@ -48,7 +48,7 @@ const Paginator = (props: PaginatorProps) => {
 
   return (
     <Show when={props.data.totalPages && props.data.totalPages >= 2}>
-      <div class="flex gap-2 items-center justify-between bg-gray-200 dark:bg-gray-800 text-black dark:text-gray-300 p-4 rounded shadow">
+      <div class="flex gap-2 items-center justify-between bg-primary-300 dark:bg-primary-950 text-black dark:text-gray-300 p-4 rounded shadow">
         <div class="flex items-center justify-center w-8 h-8">
           <Show when={props.data.page !== 1}>
             <RiArrowsArrowLeftCircleLine

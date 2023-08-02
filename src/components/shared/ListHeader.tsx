@@ -53,7 +53,7 @@ const ListHeader = (props: HeaderProps) => {
     <>
       <div
         class="flex items-center justify-between gap-2
-        bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-300
+        bg-primary-300 dark:bg-primary-950 text-gray-800 dark:text-gray-300
         p-4 rounded shadow"
       >
         <Show when={props.selectedDate}>

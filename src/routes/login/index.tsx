@@ -33,7 +33,7 @@ const Login = () => {
     <>
       <div class="flex items-center justify-center h-full">
         <div
-          class="p-4 rounded shadow bg-gray-200 dark:bg-gray-800
+          class="p-4 rounded shadow bg-primary-300 dark:bg-primary-950
             text-gray-800 dark:text-gray-300 font-medium
             w-2/3 max-w-sm"
         >
