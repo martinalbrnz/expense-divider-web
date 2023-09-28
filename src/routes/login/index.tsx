@@ -1,10 +1,13 @@
 import { createForm } from "@felte/solid";
 import { Navigate } from "@solidjs/router";
+import { RiSystemEyeLine, RiSystemEyeOffLine } from "solid-icons/ri";
+import { Show, createSignal } from "solid-js";
 import { useNavigate } from "solid-start";
 import { useCurrentUser } from "~/components/contexts/user";
 import { pb } from "~/services/pocketbase";
 
 const Login = () => {
+  const [showPassword, setShowPassword] = createSignal<boolean>(false);
   const [user, { setCurrentUser }]: any = useCurrentUser();
 
   const navigate = useNavigate();
@@ -47,13 +50,22 @@ const Login = () => {
               />
             </div>
 
-            <div class="flex flex-col">
+            <div class="flex flex-col relative">
               <label>Contraseña</label>
               <input
                 class="border rounded-md p-1 text-gray-800"
-                type="text"
+                type={showPassword() ? "text" : "password"}
                 name="password"
               />
+
+              <div
+                class="absolute right-2 top-8 text-xl cursor-pointer hover:scale-105 transition-all duration-200 text-gray-800"
+                onclick={() => setShowPassword((isShowing) => !isShowing)}
+              >
+                <Show when={showPassword()} fallback={<RiSystemEyeOffLine />}>
+                  <RiSystemEyeLine />
+                </Show>
+              </div>
             </div>
 
             <button
@@ -70,6 +82,3 @@ const Login = () => {
 };
 
 export default Login;
-function useSignal(): [any, any] {
-  throw new Error("Function not implemented.");
-}
