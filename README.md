@@ -30,3 +30,7 @@ Solid apps are built with _adapters_, which optimise your project for deployment
 By default, `npm run build` will generate a Node app that you can run with `npm start`. To use a different adapter, add it to the `devDependencies` in `package.json` and specify in your `vite.config.js`.
 
 ## Running with Pocketbase as backend
+
+## Guest credentials
+username: invitado
+password: invitado123
