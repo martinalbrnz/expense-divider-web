@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "solid-start dev",
     "dev:host": "solid-start dev --host",
-    "build": "solid-start build",
+    "build": "solid-start build --prod",
     "start": "solid-start start"
   },
   "type": "module",
