@@ -31,6 +31,25 @@ By default, `npm run build` will generate a Node app that you can run with `npm 
 
 ## Running with Pocketbase as backend
 
+# Get your own instance
+
+- `git clone https://github.com/martinalbrnz/expense-divider-web.git`
+- Download a Pocketbase executable
+- Copy the repository's `pb_migrations` folder into your pocketbase instance folder
+- Point your app .env to the served instance of pocketbase's server
+
+Here you have 2 options:
+1 - Either you:
+- Run `<path>/pocketbase.exe serve`
+- Create an admin Account
+- Run `npm/yarn/pnpm/whatever run dev`
+
+2 - Or:
+- Run `npm/yarn/pnpm/whatever run build`
+- Copy dist folter into pocketbase's pb_public folder (create if it didn't exist)
+- Run `<path>/pocketbase.exe serve`
+
 ## Guest credentials
 username: invitado
+
 password: invitado123
